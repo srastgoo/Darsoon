@@ -8,6 +8,7 @@ import { StatsDashboardScene } from "./scenes/StatsDashboardScene";
 import { ContentScene } from "./scenes/ContentScene";
 import { SubjectsScene } from "./scenes/SubjectsScene";
 import { FinalCTAScene } from "./scenes/FinalCTAScene";
+import { TitleCardScene } from "./scenes/TitleCardScene";
 import { CanadianClassroomIllustration } from "./graphics/CanadianClassroomIllustration";
 import { PersonalizedProgressIllustration } from "./graphics/PersonalizedProgressIllustration";
 import { AffordableBookingIllustration } from "./graphics/AffordableBookingIllustration";
@@ -51,8 +52,20 @@ export const DarsoonCommercial: React.FC = () => {
 
             <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
 
+            <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.titleCard}>
+              <TitleCardScene text="همه‌چیز آماده‌ست" variant="orange" />
+            </TransitionSeries.Sequence>
+
+            <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
+
             <TransitionSeries.Sequence durationInFrames={STATS_SCENE_FRAMES}>
               <StatsDashboardScene />
+            </TransitionSeries.Sequence>
+
+            <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
+
+            <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.titleCard}>
+              <TitleCardScene text="معلم مناسب شما" />
             </TransitionSeries.Sequence>
 
             <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
@@ -62,6 +75,12 @@ export const DarsoonCommercial: React.FC = () => {
                 headline={"معلم‌های دوزبانه و آشنا با برنامه\nدرسی مدارس کانادا"}
                 renderIllustration={(p, f) => <CanadianClassroomIllustration progress={p} frame={f} />}
               />
+            </TransitionSeries.Sequence>
+
+            <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
+
+            <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.titleCard}>
+              <TitleCardScene text="یادگیری متفاوت" variant="orange" />
             </TransitionSeries.Sequence>
 
             <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
@@ -76,8 +95,20 @@ export const DarsoonCommercial: React.FC = () => {
 
             <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
 
+            <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.titleCard}>
+              <TitleCardScene text="در هر درسی" />
+            </TransitionSeries.Sequence>
+
+            <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
+
             <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.subjects}>
               <SubjectsScene />
+            </TransitionSeries.Sequence>
+
+            <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
+
+            <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.titleCard}>
+              <TitleCardScene text="بدون نگرانی هزینه" variant="orange" />
             </TransitionSeries.Sequence>
 
             <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
@@ -88,6 +119,12 @@ export const DarsoonCommercial: React.FC = () => {
                 illustrationScale={1.15}
                 renderIllustration={(p, f) => <AffordableBookingIllustration progress={p} frame={f} />}
               />
+            </TransitionSeries.Sequence>
+
+            <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
+
+            <TransitionSeries.Sequence durationInFrames={DURATIONS_V3.titleCard}>
+              <TitleCardScene text="آماده‌ای؟" />
             </TransitionSeries.Sequence>
 
             <TransitionSeries.Transition presentation={slide({ direction: "from-right" })} timing={cut} />
