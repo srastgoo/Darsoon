@@ -40,6 +40,7 @@ export const BenefitScene: React.FC<{
                 fontSize: 60,
                 lineHeight: 1.4,
                 color: COLORS.textMain,
+                whiteSpace: "pre-line",
               }}
             >
               {headline}

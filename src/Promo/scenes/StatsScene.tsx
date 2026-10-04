@@ -6,9 +6,17 @@ import { BackgroundAccents } from "../components/BackgroundAccents";
 import { StatCard } from "../components/StatCard";
 import { formatPersianDecimal, formatPersianInt } from "../format";
 
+export type StatDef = {
+  target: number;
+  label: string;
+  formatValue: (current: number) => string;
+  showStars?: boolean;
+};
+
 const HEADER_END = 20;
 const SLOT_LENGTH = 50;
-const STATS = [
+
+const DEFAULT_STATS: StatDef[] = [
   {
     target: 200000,
     label: "جلسه",
@@ -34,15 +42,16 @@ const STATS = [
     label: "میانگین امتیازها",
     formatValue: (n: number) => formatPersianDecimal(n, 1),
     showStars: true,
-    decimals: 1,
   },
 ];
 
-const RECAP_START = HEADER_END + STATS.length * SLOT_LENGTH;
-
-export const StatsScene: React.FC = () => {
+export const StatsScene: React.FC<{ heading?: string; stats?: StatDef[] }> = ({
+  heading = "درسون در یک نگاه",
+  stats = DEFAULT_STATS,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const RECAP_START = HEADER_END + stats.length * SLOT_LENGTH;
 
   const headerOpacity = interpolate(frame, [0, 14, HEADER_END - 4, HEADER_END + 6], [0, 1, 1, 0], {
     extrapolateLeft: "clamp",
@@ -68,12 +77,12 @@ export const StatsScene: React.FC = () => {
             direction: "rtl",
           }}
         >
-          درسون در یک نگاه
+          {heading}
         </div>
       </AbsoluteFill>
 
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
-        {STATS.map((stat, i) => {
+        {stats.map((stat, i) => {
           const start = HEADER_END + i * SLOT_LENGTH;
           const local = frame - start;
           const entrance = interpolate(local, [0, 14, SLOT_LENGTH - 12, SLOT_LENGTH], [0, 1, 1, 0], {
@@ -108,11 +117,11 @@ export const StatsScene: React.FC = () => {
             width: "100%",
           }}
         >
-          {STATS.map((stat, i) => (
+          {stats.map((stat, i) => (
             <div
               key={i}
               style={{
-                gridColumn: i === STATS.length - 1 ? "1 / span 2" : undefined,
+                gridColumn: i === stats.length - 1 ? "1 / span 2" : undefined,
               }}
             >
               <StatCard

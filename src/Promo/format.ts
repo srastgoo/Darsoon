@@ -11,3 +11,8 @@ export const formatPersianInt = (value: number): string => {
 
 export const formatPersianDecimal = (value: number, fractionDigits = 1): string =>
   toPersianDigits(value.toFixed(fractionDigits));
+
+export const formatPersianIntPlus = (value: number): string => {
+  const rounded = Math.round(value);
+  return `+${toPersianDigits(rounded.toLocaleString("en-US"))}`;
+};

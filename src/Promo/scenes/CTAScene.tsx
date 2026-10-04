@@ -5,7 +5,12 @@ import { persianFont } from "../fonts";
 import { BrandMark } from "../components/BrandMark";
 import { CTAButton } from "../components/CTAButton";
 
-export const CTAScene: React.FC = () => {
+const DEFAULT_HEADLINE = "دروسنت رو با یک جلسه معرفی\nرایگان شروع کن";
+
+export const CTAScene: React.FC<{ headline?: string; buttonLabel?: string }> = ({
+  headline = DEFAULT_HEADLINE,
+  buttonLabel = "رزرو جلسه رایگان",
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -44,9 +49,12 @@ export const CTAScene: React.FC = () => {
               color: COLORS.textMain,
             }}
           >
-            دروسنت رو با یک جلسه معرفی
-            <br />
-            رایگان شروع کن
+            {headline.split("\n").map((line, i) => (
+              <React.Fragment key={i}>
+                {i > 0 ? <br /> : null}
+                {line}
+              </React.Fragment>
+            ))}
           </div>
         </div>
         <div
@@ -55,7 +63,7 @@ export const CTAScene: React.FC = () => {
             transform: `translateY(${interpolate(buttonSpring, [0, 1], [20, 0])}px) scale(${buttonSpring > 0.98 ? pulse : 1})`,
           }}
         >
-          <CTAButton label="رزرو جلسه رایگان" />
+          <CTAButton label={buttonLabel} />
         </div>
       </AbsoluteFill>
     </AbsoluteFill>
