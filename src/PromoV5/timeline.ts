@@ -12,7 +12,13 @@ export const SCENES = {
   cta: { from: 780, dur: 120 },
 } as const;
 
-export const TOTAL_FRAMES = 900;
+export const TOTAL_FRAMES = 900; // the motion-graphics film on its own
+
+// Full ad = client's 7s talking-head hook, a paper-toss hand-off, then the motion film.
+export const HOOK_FREEZE = 210; // hook clip plays to 7.0s, then freezes (she smiles at the lens)
+export const TOSS_LEN = 22; // freeze → polaroid → crumple, before the motion film starts
+export const MOTION_FROM = HOOK_FREEZE + TOSS_LEN;
+export const FILM_FRAMES = MOTION_FROM + TOTAL_FRAMES;
 
 // Each stat is its own 30-frame moment after a 30-frame dashboard build.
 export const STAT_INTRO = 30;

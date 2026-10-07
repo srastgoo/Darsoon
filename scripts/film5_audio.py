@@ -341,6 +341,29 @@ def sfx_success():
     return out
 
 
+def sfx_scratch():
+    """Record scratch: a fast pitch-down sweep of filtered noise + tone."""
+    t = t_axis(0.42)
+    f = 1400 * np.exp(-t * 7) + 120
+    tone = np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.35
+    noise = fft_filter(rng.standard_normal(len(t)), lo=600, hi=5000) * 0.5
+    wob = 0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 18 * t))
+    return (tone + noise) * wob * np.exp(-t * 6) * 0.8
+
+
+def sfx_crumple():
+    """Paper being scrunched into a ball: bursts of crackly noise."""
+    t = t_axis(0.5)
+    out = np.zeros_like(t)
+    for k in range(26):
+        at = rng.uniform(0, 0.42)
+        n = int(rng.uniform(0.006, 0.03) * SR)
+        i = int(at * SR)
+        burst = fft_filter(rng.standard_normal(n), lo=1800, hi=9000) * np.exp(-np.arange(n) / n * 4)
+        out[i : i + n] += burst[: len(out) - i] * rng.uniform(0.3, 1)
+    return out * 0.6
+
+
 SFX = {
     "marker": sfx_marker,
     "click": sfx_click,
@@ -354,6 +377,8 @@ SFX = {
     "thud": sfx_thud,
     "boing": sfx_boing,
     "success": sfx_success,
+    "scratch": sfx_scratch,
+    "crumple": sfx_crumple,
 }
 
 

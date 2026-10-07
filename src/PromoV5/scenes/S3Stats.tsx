@@ -313,16 +313,16 @@ const TutorFan: React.FC<{ frame: number }> = ({ frame }) => {
   if (frame < start - 2 || out >= 1) return null;
   const fan = pop(frame, start, 150, 14);
   const tutors: { photo: PersonPhoto; pos: string }[] = [
-    { photo: "tutor-math", pos: "50% 30%" },
-    { photo: "tutor-bio", pos: "50% 25%" },
-    { photo: "tutor-chem", pos: "42% 30%" },
-    { photo: "face-tutor-bio", pos: "50% 50%" },
-    { photo: "face-tutor-chem", pos: "50% 50%" },
+    // Darsoon's own tutors (client-supplied photos)
+    { photo: "team-4", pos: "50% 30%" },
+    { photo: "team-3", pos: "50% 30%" },
+    { photo: "team-1", pos: "50% 30%" },
+    { photo: "team-2", pos: "50% 30%" },
   ];
   return (
     <div style={{ position: "absolute", left: 540, top: 1820, opacity: 1 - out, transform: `translateY(${out * 300}px)` }}>
       {tutors.map((t, k) => {
-        const ang = (k - 2) * 15 * fan;
+        const ang = (k - (tutors.length - 1) / 2) * 17 * fan;
         return (
           <div
             key={k}

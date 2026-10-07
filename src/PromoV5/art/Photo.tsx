@@ -17,7 +17,11 @@ export type PersonPhoto =
   | "face-boy5"
   | "face-tutor-bio"
   | "face-tutor-chem"
-  | "face-tutor-math";
+  | "face-tutor-math"
+  | "team-1"
+  | "team-2"
+  | "team-3"
+  | "team-4";
 
 export const photoSrc = (name: PersonPhoto) => staticFile(`v5/people/${name}.webp`);
 

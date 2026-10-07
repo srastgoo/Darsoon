@@ -3,7 +3,7 @@ import { AbsoluteFill, useCurrentFrame } from "remotion";
 import { COLORS } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeInOut, lerp, pop, prog, wobble } from "../lib/anim";
-import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
+import { Burst, Card, Doodles, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Avatar, Cutout, PhotoFill } from "../art/Photo";
 import { CheckBadge, StarIcon } from "../art/Icons";
@@ -13,7 +13,7 @@ export const CTA_TAP = 64;
 export const CTA_LOGO = 86;
 
 const Phone: React.FC<{ frame: number }> = ({ frame }) => {
-  const query = "معلم ریاضی پایه ۹";
+  const query = "معلم ریاضی";
   const typed = query.slice(0, Math.floor(clamp01((frame - 10) / 16) * query.length));
   const result = pop(frame, 28, 200, 13);
   const live = pop(frame, 40, 180, 14);
@@ -204,9 +204,7 @@ export const S6CTA: React.FC = () => {
           }}
         >
           <div>
-            همین حالا با یک جلسه معرفی رایگان
-            <br />
-            شروع کنید.
+            شروع با یک جلسه معرفی رایگان
           </div>
           <svg width={54} height={54} viewBox="0 0 50 50" style={{ flexShrink: 0 }}>
             <path d="M32 12 L18 25 L32 38" fill="none" stroke={hero > 0.5 ? "#fff" : COLORS.ctaText} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
@@ -248,10 +246,7 @@ export const S6CTA: React.FC = () => {
       {/* website + rating under the button */}
       {logoOn ? (
         <div style={{ position: "absolute", left: 0, right: 0, top: 1160, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <svg width={700} height={50} style={{ overflow: "visible" }}>
-            <Marker d="M640 16 C 480 40 220 6 60 30" p={prog(frame, CTA_LOGO + 10, 10)} width={9} />
-          </svg>
-          <div style={{ marginTop: 26, fontFamily: EN, fontWeight: 700, fontSize: 60, color: COLORS.logo, letterSpacing: 1, transform: `scale(${pop(frame, CTA_LOGO + 8)})` }}>darsoon.com</div>
+          <div style={{ marginTop: 40, fontFamily: EN, fontWeight: 700, fontSize: 60, color: COLORS.logo, letterSpacing: 1, transform: `scale(${pop(frame, CTA_LOGO + 8)})` }}>darsoon.com</div>
           <div style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 10 }}>
             {new Array(5).fill(0).map((_, k) => (
               <div key={k} style={{ transform: `scale(${pop(frame, CTA_LOGO + 12 + k * 2)})` }}>

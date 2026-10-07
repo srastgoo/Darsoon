@@ -69,5 +69,6 @@ bundled Vazirmatn. All fonts load locally, so renders need no network.
 (original, license-free). Regenerate with `python3 scripts/film5_audio.py`.
 
 ```console
-npx remotion render DarsoonLaunch out/DarsoonLaunch.mp4 --crf=18
+npx remotion render DarsoonLaunch out/DarsoonLaunch.mp4 --crf=18   # hook clip + motion film (~38s)
+npx remotion render DarsoonMotion out/DarsoonMotion.mp4 --crf=18   # motion film only (30s)
 ```

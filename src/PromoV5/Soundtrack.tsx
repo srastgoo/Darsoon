@@ -108,7 +108,6 @@ const CUES: Cue[] = [
   { at: C + CTA_LOGO - 4, sfx: "whoosh", vol: 0.6 },
   { at: C + CTA_LOGO + 6, sfx: "impact", vol: 1 },
   { at: C + CTA_LOGO + 16, sfx: "pop", vol: 0.6 },
-  { at: C + CTA_LOGO + 22, sfx: "marker", vol: 0.5 },
 ];
 
 export const Soundtrack: React.FC = () => (

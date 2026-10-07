@@ -1,6 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
-import { COLORS, SCENES } from "./timeline";
+import { COLORS, HOOK_FREEZE, MOTION_FROM, SCENES, TOTAL_FRAMES } from "./timeline";
 import "./fonts";
 import { RoughDefs } from "./lib/visual";
 import { S1Problem } from "./scenes/S1Problem";
@@ -12,8 +12,10 @@ import { S6CTA } from "./scenes/S6CTA";
 import { Soundtrack } from "./Soundtrack";
 import { MarkerWipe } from "./lib/MarkerWipe";
 import { BENEFIT_LEN } from "./timeline";
+import { HookClip, PaperToss } from "./scenes/S0Hook";
 
-export const DarsoonLaunch: React.FC = () => (
+/** The 30s motion-graphics film on its own. */
+export const DarsoonMotion: React.FC = () => (
   <AbsoluteFill style={{ background: COLORS.canvas, overflow: "hidden" }}>
     <RoughDefs />
     <Sequence from={SCENES.problem.from} durationInFrames={SCENES.problem.dur} name="1 · Problem">
@@ -42,5 +44,20 @@ export const DarsoonLaunch: React.FC = () => (
         <MarkerWipe color={k === 1 ? COLORS.title : COLORS.orange} reverse={k === 1} />
       </Sequence>
     ))}
+  </AbsoluteFill>
+);
+
+/** Full ad: the client's talking-head hook, the paper-toss hand-off, then the motion film. */
+export const DarsoonLaunch: React.FC = () => (
+  <AbsoluteFill style={{ background: COLORS.canvas, overflow: "hidden" }}>
+    <Sequence durationInFrames={HOOK_FREEZE} name="0 · Hook clip">
+      <HookClip />
+    </Sequence>
+    <Sequence from={MOTION_FROM} durationInFrames={TOTAL_FRAMES} name="Motion film">
+      <DarsoonMotion />
+    </Sequence>
+    <Sequence from={HOOK_FREEZE} durationInFrames={90} name="Paper toss">
+      <PaperToss />
+    </Sequence>
   </AbsoluteFill>
 );
