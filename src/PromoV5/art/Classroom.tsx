@@ -3,7 +3,7 @@ import { COLORS } from "../timeline";
 import { EN, FA } from "../fonts";
 import { easeInOut, prog } from "../lib/anim";
 import { Marker } from "../lib/visual";
-import { Character, isBlinking } from "./Character";
+import { Cutout, PhotoFill } from "./Photo";
 import { CheckBadge } from "./Icons";
 
 /**
@@ -13,11 +13,9 @@ import { CheckBadge } from "./Icons";
  */
 export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame, still }) => {
   const f = still ? 200 : frame;
-  const talk = Math.max(0, Math.sin(f / 2.3)) * (Math.sin(f / 11) > -0.3 ? 1 : 0.2);
   const w1 = prog(f, 8, 14, easeInOut);
   const w2 = prog(f, 22, 12, easeInOut);
   const tick = prog(f, 34, 8);
-  const wave = Math.sin(f / 3.2) * 18;
 
   return (
     <div
@@ -71,21 +69,9 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
           overflow: "hidden",
         }}
       >
-        <div style={{ position: "absolute", left: 250, top: 40 }}>
-          <Character
-            size={360}
-            hair="bun"
-            skin={0}
-            hairColor={3}
-            shirt={COLORS.orange}
-            glasses
-            mood="happy"
-            talk={talk}
-            armL={60 + Math.sin(f / 6) * 12}
-            elbowL={-80}
-            blink={isBlinking(f, 5)}
-            headTilt={Math.sin(f / 14) * 3}
-          />
+        {/* real tutor webcam, slow push-in so the frame feels live */}
+        <div style={{ position: "absolute", inset: 0, transform: `scale(${1.04 + f * 0.0009})`, transformOrigin: "60% 35%" }}>
+          <PhotoFill name="tutor-chem" position="40% 30%" />
         </div>
         <div
           style={{
@@ -101,7 +87,7 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
             color: COLORS.title,
           }}
         >
-          خانم رضایی · معلم ریاضی
+          آقای کریمی · معلم ریاضی
         </div>
         {/* student PiP */}
         <div
@@ -118,8 +104,8 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
             boxShadow: "0 10px 24px rgba(0,0,0,0.12)",
           }}
         >
-          <div style={{ position: "absolute", left: -8, top: 10 }}>
-            <Character size={236} hair="curly" skin={1} hairColor={1} shirt={COLORS.blue} mood="excited" armL={150 + wave} elbowL={20} blink={isBlinking(f, 40)} />
+          <div style={{ position: "absolute", left: -18, bottom: -4 }}>
+            <Cutout name="kid-laptop" height={190} frame={f} seed={4} outline={false} />
           </div>
         </div>
       </div>

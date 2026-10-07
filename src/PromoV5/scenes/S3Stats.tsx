@@ -4,7 +4,9 @@ import { COLORS, STAT_INTRO, STAT_LEN } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeIn, easeInOut, easeOut, lerp, pop, prog, rand, wobble } from "../lib/anim";
 import { Burst, Card, Marker, Paper, Shockwave, starPath } from "../lib/visual";
-import { Character } from "../art/Character";
+import { Avatar, PhotoFill, type PersonPhoto } from "../art/Photo";
+
+const FACES: PersonPhoto[] = ["face-boy1", "face-girl", "face-boy2", "face-boy5"];
 import { CheckBadge, StarIcon, VideoIcon } from "../art/Icons";
 import { Classroom } from "../art/Classroom";
 
@@ -229,31 +231,21 @@ const StudentRain: React.FC<{ frame: number }> = ({ frame }) => {
         const b = bounce(frame - delay, 900 + rand(k) * 400, 7800, 0.42);
         const sx = 1 + b.squash * 0.35;
         const sy = 1 - b.squash * 0.35;
-        const hair = ["#2a201c", "#4a3125", "#6b4428", "#1d1716"][k % 4];
-        const shirt = [COLORS.orange, COLORS.blue, COLORS.teal, COLORS.purple, COLORS.yellow][k % 5];
-        const skin = ["#f1c19a", "#e0a87c", "#c98a5b", "#a86c43"][(k * 3) % 4];
+        const face = FACES[k % FACES.length];
+        const ring = [COLORS.orange, COLORS.blue, COLORS.teal, COLORS.purple, COLORS.yellow][k % 5];
         return (
-          <svg
+          <div
             key={k}
-            width={110}
-            height={120}
-            viewBox="0 0 110 120"
             style={{
               position: "absolute",
               left: x - 55,
-              top: ground - 120 - b.y,
+              top: ground - 110 - b.y,
               transform: `scale(${sx}, ${sy}) rotate(${b.landed ? wobble(frame - delay - 8, 6) : (rand(k) - 0.5) * 30}deg)`,
               transformOrigin: "50% 100%",
-              overflow: "visible",
             }}
           >
-            <path d="M8 120 Q8 76 55 74 Q102 76 102 120 Z" fill={shirt} />
-            <circle cx={55} cy={46} r={32} fill={skin} />
-            <path d="M22 44 Q24 8 58 12 Q90 14 88 44 Q74 26 52 28 Q34 30 22 44 Z" fill={hair} />
-            <circle cx={44} cy={50} r={4} fill="#2a201c" />
-            <circle cx={66} cy={50} r={4} fill="#2a201c" />
-            <path d="M45 62 Q55 70 65 62" stroke="#6b3a28" strokeWidth={4} fill="none" strokeLinecap="round" />
-          </svg>
+            <Avatar name={face} size={110} ring={ring} />
+          </div>
         );
       })}
     </div>
@@ -316,12 +308,12 @@ const TutorFan: React.FC<{ frame: number }> = ({ frame }) => {
   const out = prog(frame, at(4) - 5, 8, easeIn);
   if (frame < start - 2 || out >= 1) return null;
   const fan = pop(frame, start, 150, 14);
-  const tutors = [
-    { hair: "hijab" as const, shirt: COLORS.purple, skin: 0 },
-    { hair: "short" as const, shirt: COLORS.teal, skin: 2 },
-    { hair: "bun" as const, shirt: COLORS.orange, skin: 0 },
-    { hair: "short" as const, shirt: COLORS.blue, skin: 3 },
-    { hair: "pony" as const, shirt: COLORS.green, skin: 1 },
+  const tutors: { photo: PersonPhoto; pos: string }[] = [
+    { photo: "tutor-math", pos: "50% 30%" },
+    { photo: "tutor-bio", pos: "50% 25%" },
+    { photo: "tutor-chem", pos: "42% 30%" },
+    { photo: "face-tutor-bio", pos: "50% 50%" },
+    { photo: "face-tutor-chem", pos: "50% 50%" },
   ];
   return (
     <div style={{ position: "absolute", left: 540, top: 1820, opacity: 1 - out, transform: `translateY(${out * 300}px)` }}>
@@ -340,9 +332,7 @@ const TutorFan: React.FC<{ frame: number }> = ({ frame }) => {
           >
             <Card radius={30} pad={0} style={{ width: 300, height: 400, overflow: "hidden", position: "relative" }}>
               <div style={{ height: 290, background: [COLORS.ctaBg, "#e7f0fb", "#e6f6f3", "#f1eafc", "#fff4dd"][k], overflow: "hidden" }}>
-                <div style={{ marginLeft: 10, marginTop: 14 }}>
-                  <Character size={280} hair={t.hair} skin={t.skin} hairColor={k} shirt={t.shirt} mood="happy" glasses={k === 2} />
-                </div>
+                <PhotoFill name={t.photo} position={t.pos} />
               </div>
               <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 22 }}>
                 {new Array(5).fill(0).map((_, z) => (

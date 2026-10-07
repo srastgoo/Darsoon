@@ -5,6 +5,7 @@ import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeInOut, easeOut, lerp, pop, prog, rand, wobble } from "../lib/anim";
 import { Burst, Marker } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
+import { Cutout, PhotoFill } from "../art/Photo";
 
 type Subject = { name: string; color: string; bg: string; Visual: React.FC<{ f: number }>; origin: [number, number] };
 
@@ -40,6 +41,9 @@ const MathVisual: React.FC<{ f: number }> = ({ f }) => {
           </div>
         );
       })}
+      <div style={{ position: "absolute", left: 30, top: 1430 + (1 - pop(f, 4, 170, 14)) * 500 }}>
+        <Cutout name="kid-girl" height={400} frame={f} seed={8} />
+      </div>
     </>
   );
 };
@@ -95,6 +99,7 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
   const split = prog(f, 10, 16, easeInOut);
   const n = 16;
   return (
+    <>
     <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
       <g transform={`translate(340 1120) scale(${enter})`}>
         {new Array(n).fill(0).map((_, k) => {
@@ -113,7 +118,7 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
         })}
       </g>
       {/* dividing cell */}
-      <g transform="translate(780 1180)">
+      <g transform="translate(790 960)">
         {[-1, 1].map((s) => (
           <g key={s} transform={`translate(0 ${s * split * 150}) scale(${1 - split * 0.25 + wobble(f - 26, 0.06)}, ${1 - split * 0.25 - wobble(f - 26, 0.06)})`}>
             <circle r={150} fill="#cdeec8" stroke={COLORS.green} strokeWidth={10} opacity={0.85} />
@@ -122,6 +127,23 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
         ))}
       </g>
     </svg>
+    <div
+      style={{
+        position: "absolute",
+        left: 470,
+        top: 1420,
+        width: 540,
+        height: 349,
+        borderRadius: 30,
+        overflow: "hidden",
+        border: "8px solid #fff",
+        boxShadow: "0 30px 50px -18px rgba(40,90,40,0.45)",
+        transform: `translateY(${(1 - pop(f, 6, 170, 14)) * 500}px) rotate(-3deg)`,
+      }}
+    >
+      <PhotoFill name="tutor-bio-wide" position="50% 50%" />
+    </div>
+    </>
   );
 };
 
@@ -137,7 +159,7 @@ const ChemVisual: React.FC<{ f: number }> = ({ f }) => {
   return (
     <>
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
-        <g transform={`translate(540 1200) rotate(${slosh * 0.2})`}>
+        <g transform={`translate(560 1000) scale(0.72) rotate(${slosh * 0.2})`}>
           <clipPath id="v5flask">
             <path d="M-70 -330 V-150 L-280 260 Q-300 300 -260 300 H260 Q300 300 280 260 L70 -150 V-330 Z" />
           </clipPath>
@@ -187,6 +209,9 @@ const ChemVisual: React.FC<{ f: number }> = ({ f }) => {
           </div>
         );
       })}
+      <div style={{ position: "absolute", left: 210, top: 1190 + (1 - pop(f, 3, 170, 14)) * 600 }}>
+        <Cutout name="kid-chem" height={600} frame={f} seed={9} />
+      </div>
     </>
   );
 };

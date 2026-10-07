@@ -5,7 +5,7 @@ import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeIn, easeInOut, jitter, pop, prog, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
-import { Character, isBlinking } from "../art/Character";
+import { Cutout } from "../art/Photo";
 import { LaptopIcon } from "../art/Icons";
 
 /** Handwritten formula revealed left-to-right like a marker writing it. */
@@ -96,7 +96,6 @@ export const S1Problem: React.FC = () => {
 
   // student
   const studentIn = pop(frame, 2, 160, 14);
-  const headTilt = -6 + Math.sin(frame / 10) * 3;
 
   // big question mark drops with real bounce
   const q = bounce(frame - 62, 700, 7200, 0.42);
@@ -104,8 +103,8 @@ export const S1Problem: React.FC = () => {
   const qVisible = frame >= 62;
 
   // dot of the question mark becomes the orange iris for the next scene
-  const qx = 820;
-  const qGround = 1640;
+  const qx = 900;
+  const qGround = 1290;
   const dotScale = 1 + outro * 120;
 
   return (
@@ -116,45 +115,32 @@ export const S1Problem: React.FC = () => {
       {/* formulas written around */}
       <Scribble frame={frame} text="x² + 5x − 6 = ?" x={70} y={720} at={4} rot={-6} size={62} strike />
       <Scribble frame={frame} text="F = m · a" x={700} y={650} at={10} rot={7} size={60} color={COLORS.blue} />
-      <Scribble frame={frame} text="H₂O + CO₂ → ?" x={640} y={1010} at={16} rot={-4} color={COLORS.teal} size={50} strike />
-      <Scribble frame={frame} text="a² + b² = c²" x={50} y={930} at={22} rot={5} color={COLORS.purple} size={50} />
-      <Scribble frame={frame} text="∫ ?" x={110} y={1180} at={30} rot={-10} color={COLORS.red} size={72} />
+      <Scribble frame={frame} text="H₂O + CO₂ → ?" x={420} y={1110} at={16} rot={-4} color={COLORS.teal} size={50} strike />
+      <Scribble frame={frame} text="a² + b² = c²" x={560} y={860} at={22} rot={5} color={COLORS.purple} size={50} />
+      <Scribble frame={frame} text="∫ ?" x={380} y={740} at={30} rot={-10} color={COLORS.red} size={72} />
 
       {/* desk line */}
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
         <Marker d="M50 1700 C360 1688 720 1710 1030 1696" p={prog(frame, 0, 16)} color={COLORS.title} width={7} />
       </svg>
 
-      {/* student behind the laptop */}
+      {/* real student, seen from behind, stuck in front of the laptop */}
       <div
         style={{
           position: "absolute",
-          left: 540 - 220,
-          top: 960 + (1 - studentIn) * 300,
-          transform: `rotate(${shake * 0.15}deg)`,
+          left: -70,
+          top: 900 + (1 - studentIn) * 400,
+          transform: `rotate(${shake * 0.12}deg)`,
+          transformOrigin: "50% 100%",
         }}
       >
-        <Character
-          size={440}
-          hair="curly"
-          skin={1}
-          hairColor={1}
-          shirt={COLORS.blue}
-          mood="worried"
-          armR={150}
-          elbowR={40}
-          armL={20}
-          elbowL={-30}
-          headTilt={headTilt}
-          blink={isBlinking(frame, 20)}
-          lookX={-0.6}
-        />
+        <Cutout name="kid-back" height={1040} frame={frame} seed={1} />
       </div>
 
       {/* laptop */}
-      <div style={{ position: "absolute", left: 540 - 270 + shake, top: 1350, transform: `scale(${pop(frame, 6)})`, transformOrigin: "50% 100%" }}>
+      <div style={{ position: "absolute", left: 500 + shake, top: 1420, transform: `scale(${pop(frame, 6)})`, transformOrigin: "50% 100%" }}>
         <LaptopIcon
-          size={540}
+          size={410}
           screen={
             <g>
               <rect x="36" y="22" width="88" height="14" rx="7" fill="#f2ece7" />
@@ -172,17 +158,17 @@ export const S1Problem: React.FC = () => {
       </div>
 
       {/* falling textbooks with physics */}
-      <Book frame={frame} at={8} x={60} ground={1700} w={270} h={64} color={COLORS.orange} rot={-14} h0={900} />
-      <Book frame={frame} at={14} x={80} ground={1636} w={230} h={58} color={COLORS.teal} rot={10} h0={950} />
-      <Book frame={frame} at={20} x={70} ground={1578} w={250} h={56} color={COLORS.purple} rot={-8} h0={1000} />
-      <Shockwave frame={frame - 15} x={190} y={1700} color={COLORS.title} max={180} />
+      <Book frame={frame} at={8} x={900} ground={1700} w={170} h={56} color={COLORS.orange} rot={-14} h0={900} />
+      <Book frame={frame} at={14} x={912} ground={1644} w={150} h={50} color={COLORS.teal} rot={10} h0={950} />
+      <Book frame={frame} at={20} x={905} ground={1594} w={160} h={48} color={COLORS.purple} rot={-8} h0={1000} />
+      <Shockwave frame={frame - 15} x={985} y={1700} color={COLORS.title} max={180} />
 
       {/* "no results" sticker */}
       <div
         style={{
           position: "absolute",
-          left: 600,
-          top: 1290,
+          left: 430,
+          top: 1270,
           transform: `rotate(-6deg) scale(${noResult})`,
           transformOrigin: "0% 100%",
         }}

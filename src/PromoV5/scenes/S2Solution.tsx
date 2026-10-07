@@ -5,20 +5,20 @@ import { FA } from "../fonts";
 import { bounce, clamp01, easeInOut, easeOut, lerp, pop, prog, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
-import { Character, isBlinking } from "../art/Character";
+import { Cutout, PhotoFill, type PersonPhoto } from "../art/Photo";
 import { CheckBadge, DarsoonMark } from "../art/Icons";
 import { Classroom } from "../art/Classroom";
 
 const TUTORS = [
-  { name: "آقای کریمی", sub: "شیمی", hair: "short" as const, shirt: COLORS.teal, skin: 2 },
-  { name: "خانم احمدی", sub: "فیزیک", hair: "hijab" as const, shirt: COLORS.purple, skin: 0 },
-  { name: "خانم رضایی", sub: "ریاضی · پایه ۹", hair: "bun" as const, shirt: COLORS.orange, skin: 0 },
+  { name: "خانم احمدی", sub: "زیست‌شناسی", photo: "tutor-bio" as PersonPhoto, pos: "50% 30%" },
+  { name: "خانم رضایی", sub: "ریاضی", photo: "tutor-math" as PersonPhoto, pos: "50% 30%" },
+  { name: "آقای کریمی", sub: "ریاضی · پایه ۹", photo: "tutor-chem" as PersonPhoto, pos: "45% 30%" },
 ];
 
 const ProfileCard: React.FC<{ frame: number; name: string; sub: string; children: React.ReactNode; tint: string }> = ({ name, sub, children, tint }) => (
   <Card radius={36} pad={0} style={{ width: 410, height: 560, overflow: "hidden", position: "relative" }}>
     <div style={{ height: 370, background: tint, position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", left: 22, top: 24 }}>{children}</div>
+      <div style={{ position: "absolute", inset: 0 }}>{children}</div>
     </div>
     <div style={{ padding: "22px 26px", direction: "rtl", fontFamily: FA }}>
       <div style={{ fontWeight: 900, fontSize: 46, color: COLORS.title }}>{name}</div>
@@ -97,14 +97,16 @@ export const S2Solution: React.FC = () => {
             <div style={{ transform: `translateY(${-slot * 560}px)`, filter: slotSpeed > 3 ? `blur(${Math.min(slotSpeed * 0.15, 8)}px)` : undefined }}>
               {TUTORS.map((t, i) => (
                 <ProfileCard key={i} frame={frame} name={t.name} sub={t.sub} tint={i === 2 ? COLORS.ctaBg : "#eef3f6"}>
-                  <Character size={366} hair={t.hair} skin={t.skin} hairColor={3} shirt={t.shirt} mood="happy" glasses={i === 2} blink={isBlinking(frame, i * 9)} />
+                  <PhotoFill name={t.photo} position={t.pos} />
                 </ProfileCard>
               ))}
             </div>
           </div>
           {/* student (right) */}
           <ProfileCard frame={frame} name="آرمان" sub="ریاضی · پایه ۹" tint="#e7f0fb">
-            <Character size={366} hair="curly" skin={1} hairColor={1} shirt={COLORS.blue} mood={frame > 90 ? "excited" : "neutral"} blink={isBlinking(frame, 30)} lookX={-1} />
+            <div style={{ position: "absolute", left: -20, bottom: -6 }}>
+              <Cutout name="kid-laptop" height={330} frame={frame} seed={2} outline={false} />
+            </div>
           </ProfileCard>
 
           <svg width={1080} height={600} style={{ position: "absolute", left: 0, top: 0, overflow: "visible", pointerEvents: "none" }}>

@@ -5,7 +5,7 @@ import { EN, FA } from "../fonts";
 import { bounce, easeInOut, easeOut, jitter, pendulum, pop, prog, rand, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
-import { Character, isBlinking } from "../art/Character";
+import { Avatar, Cutout, PhotoFill } from "../art/Photo";
 import { CoinIcon, HeartIcon, MapleLeaf, StarIcon } from "../art/Icons";
 
 const Headline: React.FC<{ frame: number; text: string; accent: string[]; underline?: string[]; highlight?: string[]; size?: number }> = ({
@@ -118,8 +118,19 @@ const BenefitCanada: React.FC = () => {
       <div style={{ position: "absolute", left: 40, top: 1240, transform: "scale(1.15)", transformOrigin: "0% 0%" }}>
         <Curriculum frame={frame} />
       </div>
-      <div style={{ position: "absolute", left: 560, top: 1250, transform: `translateX(${(1 - teacherIn) * 500}px)` }}>
-        <Character size={520} hair="short" skin={2} hairColor={0} shirt={COLORS.teal} glasses mood="happy" talk={Math.max(0, Math.sin(frame / 2.5))} armR={130 + Math.sin(frame / 5) * 10} elbowR={-20} blink={isBlinking(frame, 12)} />
+      {/* real tutor explaining a lesson over video */}
+      <div style={{ position: "absolute", left: 540, top: 1290, transform: `translateX(${(1 - teacherIn) * 600}px) rotate(${4 - (1 - teacherIn) * 10}deg)` }}>
+        <Card radius={30} pad={12} style={{ width: 500, position: "relative" }}>
+          <div style={{ width: 476, height: 308, borderRadius: 22, overflow: "hidden" }}>
+            <div style={{ width: "100%", height: "100%", transform: `scale(${1.02 + frame * 0.001})` }}>
+              <PhotoFill name="tutor-bio-wide" position="50% 40%" />
+            </div>
+          </div>
+          <div style={{ position: "absolute", left: 28, top: 26, display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 20, padding: "4px 14px", fontFamily: FA, fontWeight: 800, fontSize: 24, color: COLORS.red }}>
+            <div style={{ width: 10, height: 10, borderRadius: 5, background: COLORS.red, opacity: frame % 30 < 18 ? 1 : 0.3 }} />
+            زنده
+          </div>
+        </Card>
       </div>
     </AbsoluteFill>
   );
@@ -241,11 +252,11 @@ const BenefitPersonal: React.FC = () => {
       <div style={{ position: "absolute", left: 560, top: 1180 }}>
         <Feedback frame={frame} />
       </div>
-      <div style={{ position: "absolute", left: 120, top: 1460 - kid.y, transform: `scale(${1 + kid.squash * 0.15}, ${1 - kid.squash * 0.15})`, transformOrigin: "50% 100%" }}>
-        <Character size={330} hair="curly" skin={1} hairColor={1} shirt={COLORS.blue} mood={frame > 38 ? "excited" : "happy"} armL={frame > 38 ? 160 : 20} armR={frame > 38 ? 160 : 20} elbowL={frame > 38 ? 10 : 0} elbowR={frame > 38 ? 10 : 0} blink={isBlinking(frame, 3)} />
+      <div style={{ position: "absolute", left: 40, top: 1450 - kid.y, transform: `scale(${1 + kid.squash * 0.15}, ${1 - kid.squash * 0.15})`, transformOrigin: "50% 100%" }}>
+        <Cutout name="kid-girl" height={470} frame={frame} seed={5} />
       </div>
-      <div style={{ position: "absolute", left: 640, top: 1500, transform: `scale(${pop(frame, 22)})` }}>
-        <Character size={340} hair="bun" skin={0} hairColor={3} shirt={COLORS.orange} glasses mood="happy" talk={frame > 26 && frame < 50 ? Math.max(0, Math.sin(frame / 2.4)) : 0} armR={40} elbowR={-50} blink={isBlinking(frame, 50)} />
+      <div style={{ position: "absolute", left: 880, top: 1450, transform: `scale(${pop(frame, 22)})` }}>
+        <Avatar name="face-tutor-math" size={150} ring={COLORS.orange} />
       </div>
       <Burst frame={frame - 40} x={240} y={1500} seed={21} count={16} />
     </AbsoluteFill>
@@ -332,11 +343,11 @@ const BenefitPrice: React.FC = () => {
       <div style={{ position: "absolute", left: 40, top: 760 }}>
         <BalanceScale frame={frame} />
       </div>
-      <div style={{ position: "absolute", left: 590, top: 1420 }}>
-        <Character size={420} hair="hijab" skin={0} shirt={COLORS.purple} mood={frame > 30 ? "excited" : "happy"} armL={frame > 30 ? 150 : 30} elbowL={frame > 30 ? 30 : -40} blink={isBlinking(frame, 8)} />
+      <div style={{ position: "absolute", left: 540, top: 1500, transform: `translateY(${(1 - pop(frame, 6, 160, 14)) * 400}px)` }}>
+        <Cutout name="kid-laptop" height={420} frame={frame} seed={6} />
       </div>
-      <div style={{ position: "absolute", left: 100, top: 1520 }}>
-        <Character size={360} hair="pony" skin={0} hairColor={2} shirt={COLORS.orange} mood="happy" armR={30} blink={isBlinking(frame, 33)} />
+      <div style={{ position: "absolute", left: 30, top: 1490, transform: `translateY(${(1 - pop(frame, 10, 160, 14)) * 400}px)` }}>
+        <Cutout name="kid-desk" height={430} frame={frame} seed={7} flip />
       </div>
       <div style={{ position: "absolute", left: 830, top: 1360, transform: `scale(${heart}) rotate(${wobble(frame - 34, 14)}deg)` }}>
         <HeartIcon size={120} />

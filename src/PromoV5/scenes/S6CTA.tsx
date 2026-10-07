@@ -5,7 +5,7 @@ import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeInOut, lerp, pop, prog, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
-import { Character, isBlinking } from "../art/Character";
+import { Avatar, Cutout, PhotoFill } from "../art/Photo";
 import { CheckBadge, DarsoonMark, StarIcon } from "../art/Icons";
 
 export const CTA_TAP = 64;
@@ -16,7 +16,6 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
   const typed = query.slice(0, Math.floor(clamp01((frame - 10) / 16) * query.length));
   const result = pop(frame, 28, 200, 13);
   const live = pop(frame, 40, 180, 14);
-  const talk = Math.max(0, Math.sin(frame / 2.4));
   return (
     <div
       style={{
@@ -63,13 +62,9 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
         {/* tutor result */}
         <div style={{ margin: "24px 26px 0", transform: `translateY(${(1 - result) * 120}px) scale(${0.8 + result * 0.2})`, opacity: clamp01(result * 2) }}>
           <Card radius={30} pad={18} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ width: 120, height: 120, borderRadius: 26, background: COLORS.ctaBg, overflow: "hidden", flexShrink: 0 }}>
-              <div style={{ marginLeft: -6, marginTop: 4 }}>
-                <Character size={132} hair="bun" hairColor={3} shirt={COLORS.orange} glasses />
-              </div>
-            </div>
+            <Avatar name="face-tutor-chem" size={120} ring={COLORS.ctaBg} style={{ flexShrink: 0 }} />
             <div style={{ fontFamily: FA, flex: 1 }}>
-              <div style={{ fontWeight: 900, fontSize: 32, color: COLORS.title }}>خانم رضایی</div>
+              <div style={{ fontWeight: 900, fontSize: 32, color: COLORS.title }}>آقای کریمی</div>
               <div style={{ fontWeight: 600, fontSize: 24, color: COLORS.secondary }}>ریاضی · برنامه درسی کانادا</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6 }}>
                 {new Array(5).fill(0).map((_, k) => (
@@ -95,12 +90,12 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
             transform: `scale(${live})`,
           }}
         >
-          <div style={{ position: "absolute", left: 70, top: 46 }}>
-            <Character size={330} hair="bun" hairColor={3} shirt={COLORS.orange} glasses talk={talk} armL={70 + Math.sin(frame / 4) * 20} elbowL={-70} blink={isBlinking(frame, 4)} />
+          <div style={{ position: "absolute", inset: 0, transform: `scale(${1.05 + frame * 0.001})`, transformOrigin: "40% 35%" }}>
+            <PhotoFill name="tutor-chem" position="40% 30%" />
           </div>
           <div style={{ position: "absolute", right: 18, top: 18, width: 160, height: 150, borderRadius: 22, background: "#e7f0fb", border: "4px solid #fff", overflow: "hidden" }}>
-            <div style={{ marginLeft: -10, marginTop: 4 }}>
-              <Character size={180} hair="curly" skin={1} hairColor={1} shirt={COLORS.blue} mood="excited" armL={150 + Math.sin(frame / 3) * 20} elbowL={20} />
+            <div style={{ position: "absolute", left: -14, bottom: -4 }}>
+              <Cutout name="kid-laptop" height={150} frame={frame} seed={3} outline={false} />
             </div>
           </div>
           <div style={{ position: "absolute", left: 18, bottom: 18, display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 20, padding: "4px 14px", fontFamily: FA, fontWeight: 800, fontSize: 22, color: COLORS.red }}>
@@ -142,12 +137,12 @@ export const S6CTA: React.FC = () => {
         <KineticText text={"همین حالا معلم مناسب\nفرزندت رو پیدا کن"} frame={frame} start={14} size={86} stagger={3} accent={["مناسب"]} underline={["مناسب"]} />
       </div>
 
-      {/* flanking happy tutor & student */}
-      <div style={{ position: "absolute", left: -40, top: 1000, transform: `translateX(${(1 - pop(frame, 20, 160, 14)) * -400}px) rotate(-4deg)` }}>
-        <Character size={360} hair="short" skin={2} shirt={COLORS.teal} glasses mood="happy" armR={150 + Math.sin(frame / 4) * 14} elbowR={20} blink={isBlinking(frame, 7)} />
+      {/* real students on either side, turned toward the phone */}
+      <div style={{ position: "absolute", left: -40, top: 1000, transform: `translateX(${(1 - pop(frame, 20, 160, 14)) * -400}px)` }}>
+        <Cutout name="kid-girl" height={430} frame={frame} seed={10} flip />
       </div>
-      <div style={{ position: "absolute", left: 760, top: 1010, transform: `translateX(${(1 - pop(frame, 24, 160, 14)) * 400}px) rotate(4deg)` }}>
-        <Character size={340} hair="pony" skin={0} hairColor={2} shirt={COLORS.yellow} mood={frame > CTA_TAP ? "excited" : "happy"} armL={frame > CTA_TAP ? 160 : 30} armR={frame > CTA_TAP ? 160 : 30} elbowL={10} elbowR={10} blink={isBlinking(frame, 30)} />
+      <div style={{ position: "absolute", left: 760, top: 990, transform: `translateX(${(1 - pop(frame, 24, 160, 14)) * 400}px) translateY(${frame > CTA_TAP ? -bounce(frame - CTA_TAP, 40, 5000, 0.4).y : 0}px)` }}>
+        <Cutout name="kid-desk" height={440} frame={frame} seed={11} />
       </div>
 
       {/* phone */}
