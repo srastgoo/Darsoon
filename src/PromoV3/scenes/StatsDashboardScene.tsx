@@ -9,7 +9,7 @@ import { formatPersianDecimal, formatPersianIntPlus } from "../../Promo/format";
 import { GrowthBars } from "../graphics/GrowthBars";
 import { STATS_HEADER_FRAMES, STATS_SLOT_FRAMES } from "../durations";
 
-const STATS = [
+const DEFAULT_STATS = [
   { target: 200000, label: "جلسه برگزار شده", formatValue: formatPersianIntPlus },
   { target: 7000, label: "شاگرد", formatValue: formatPersianIntPlus },
   { target: 130, label: "رشته", formatValue: formatPersianIntPlus },
@@ -22,11 +22,14 @@ const STATS = [
   },
 ];
 
-const RECAP_START = STATS_HEADER_FRAMES + STATS_SLOT_FRAMES * STATS.length;
+export type StatsDashboardStat = (typeof DEFAULT_STATS)[number];
 
-export const StatsDashboardScene: React.FC = () => {
+export const StatsDashboardScene: React.FC<{ stats?: StatsDashboardStat[] }> = ({
+  stats = DEFAULT_STATS,
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const RECAP_START = STATS_HEADER_FRAMES + STATS_SLOT_FRAMES * stats.length;
 
   const headerOpacity = interpolate(
     frame,
@@ -65,7 +68,7 @@ export const StatsDashboardScene: React.FC = () => {
       </AbsoluteFill>
 
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center" }}>
-        {STATS.map((stat, i) => {
+        {stats.map((stat, i) => {
           const start = STATS_HEADER_FRAMES + i * STATS_SLOT_FRAMES;
           const local = frame - start;
           const entrance = interpolate(
@@ -131,8 +134,8 @@ export const StatsDashboardScene: React.FC = () => {
               width: "100%",
             }}
           >
-            {STATS.map((stat, i) => (
-              <div key={i} style={{ gridColumn: i === STATS.length - 1 ? "1 / span 2" : undefined }}>
+            {stats.map((stat, i) => (
+              <div key={i} style={{ gridColumn: i === stats.length - 1 ? "1 / span 2" : undefined }}>
                 <StatCard
                   entrance={1}
                   countProgress={1}

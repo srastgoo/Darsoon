@@ -6,6 +6,8 @@ import { DarsoonTutorAd } from "./PromoV2/DarsoonTutorAd";
 import { TOTAL_DURATION_V2 } from "./PromoV2/durations";
 import { DarsoonCommercial } from "./PromoV3/DarsoonCommercial";
 import { TOTAL_DURATION_V3 } from "./PromoV3/durations";
+import { DarsoonFilm } from "./PromoV4/DarsoonFilm";
+import { TOTAL_DURATION_V4 } from "./PromoV4/durations";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -31,6 +33,14 @@ export const RemotionRoot: React.FC = () => {
         component={DarsoonCommercial}
         durationInFrames={TOTAL_DURATION_V3}
         fps={FPS}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="DarsoonFilm"
+        component={DarsoonFilm}
+        durationInFrames={TOTAL_DURATION_V4}
+        fps={30}
         width={1080}
         height={1920}
       />

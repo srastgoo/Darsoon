@@ -12,7 +12,8 @@ export const Person: React.FC<{
   skinIndex?: number;
   clothIndex?: number;
   flip?: boolean;
-}> = ({ age, size = 160, skinIndex = 0, clothIndex = 0, flip }) => {
+  mood?: "happy" | "worried";
+}> = ({ age, size = 160, skinIndex = 0, clothIndex = 0, flip, mood = "happy" }) => {
   const skin = SKIN_TONES[skinIndex % SKIN_TONES.length];
   const cloth = CLOTH_COLORS[clothIndex % CLOTH_COLORS.length];
   const isChild = age === "child";
@@ -52,13 +53,39 @@ export const Person: React.FC<{
       )}
       <circle cx={100 - headR * 0.34} cy={headCy + 2} r={4.2} fill="#2c2320" />
       <circle cx={100 + headR * 0.34} cy={headCy + 2} r={4.2} fill="#2c2320" />
-      <path
-        d={`M ${100 - headR * 0.28} ${headCy + headR * 0.42} Q 100 ${headCy + headR * 0.62} ${100 + headR * 0.28} ${headCy + headR * 0.42}`}
-        stroke="#7a4a34"
-        strokeWidth={3}
-        strokeLinecap="round"
-        fill="none"
-      />
+      {mood === "worried" ? (
+        <>
+          <path
+            d={`M ${100 - headR * 0.5} ${headCy - headR * 0.32} q ${headR * 0.2} ${-headR * 0.14} ${headR * 0.4} 0`}
+            stroke="#2c2320"
+            strokeWidth={3}
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d={`M ${100 + headR * 0.1} ${headCy - headR * 0.32} q ${headR * 0.2} ${-headR * 0.14} ${headR * 0.4} 0`}
+            stroke="#2c2320"
+            strokeWidth={3}
+            strokeLinecap="round"
+            fill="none"
+          />
+          <path
+            d={`M ${100 - headR * 0.28} ${headCy + headR * 0.56} Q 100 ${headCy + headR * 0.4} ${100 + headR * 0.28} ${headCy + headR * 0.56}`}
+            stroke="#7a4a34"
+            strokeWidth={3}
+            strokeLinecap="round"
+            fill="none"
+          />
+        </>
+      ) : (
+        <path
+          d={`M ${100 - headR * 0.28} ${headCy + headR * 0.42} Q 100 ${headCy + headR * 0.62} ${100 + headR * 0.28} ${headCy + headR * 0.42}`}
+          stroke="#7a4a34"
+          strokeWidth={3}
+          strokeLinecap="round"
+          fill="none"
+        />
+      )}
     </svg>
   );
 };
