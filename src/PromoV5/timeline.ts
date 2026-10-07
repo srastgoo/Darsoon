@@ -24,6 +24,7 @@ export const SUBJECT_LEN = 30;
 export const COLORS = {
   canvas: "#fcf9f7",
   orange: "#ed5f00",
+  logo: "#f2744c", // exact colour of the supplied Darsoon logo files
   title: "#454242",
   secondary: "#7b7877",
   ctaBg: "#fce3d0",

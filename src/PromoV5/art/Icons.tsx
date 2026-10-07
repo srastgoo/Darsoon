@@ -100,12 +100,3 @@ export const ClockIcon: React.FC<P & { frame?: number }> = ({ size, color = COLO
     <path d={`M50 50 L${50 + Math.cos(frame / 60) * 18} ${50 + Math.sin(frame / 60) * 18}`} stroke={color} strokeWidth="7" strokeLinecap="round" />
   </S>
 );
-
-/** Darsoon mark: orange rounded square with a white open-book/“د” glyph. */
-export const DarsoonMark: React.FC<P> = ({ size = 120, style }) => (
-  <S size={size} style={style}>
-    <rect x="4" y="4" width="92" height="92" rx="28" fill={COLORS.orange} />
-    <path d="M26 36 Q38 30 50 38 Q62 30 74 36 V70 Q62 64 50 72 Q38 64 26 70 Z" fill="#fff" />
-    <path d="M50 38 V72" stroke={COLORS.orange} strokeWidth="4" />
-  </S>
-);

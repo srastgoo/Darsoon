@@ -209,7 +209,7 @@ export const S1Problem: React.FC = () => {
         >
           <svg viewBox="0 0 180 300" width={180} height={300} style={{ overflow: "visible" }}>
             <path d="M40 80 C40 20 140 20 140 80 C140 130 90 130 90 180 V196" fill="none" stroke={COLORS.title} strokeWidth={34} strokeLinecap="round" />
-            <circle cx={90} cy={262} r={22 * dotScale} fill={COLORS.orange} />
+            <circle cx={90} cy={262} r={22 * dotScale} fill={COLORS.logo} />
           </svg>
         </div>
       ) : null}

@@ -4,6 +4,7 @@ import { EN, FA } from "../fonts";
 import { easeInOut, prog } from "../lib/anim";
 import { Marker } from "../lib/visual";
 import { Cutout, PhotoFill } from "./Photo";
+import { LogoIcon } from "./Brand";
 import { CheckBadge } from "./Icons";
 
 /**
@@ -32,7 +33,8 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
     >
       {/* window bar */}
       <div style={{ height: 84, display: "flex", alignItems: "center", padding: "0 32px", gap: 16, borderBottom: "2px solid #f1ebe6" }}>
-        <div style={{ fontFamily: FA, fontWeight: 800, fontSize: 32, color: COLORS.title }}>کلاس آنلاین درسون</div>
+        <LogoIcon size={46} />
+        <div style={{ fontFamily: FA, fontWeight: 800, fontSize: 32, color: COLORS.title }}>کلاس آنلاین</div>
         <div
           style={{
             display: "flex",
@@ -87,7 +89,7 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
             color: COLORS.title,
           }}
         >
-          آقای کریمی · معلم ریاضی
+          علی یوسفی · معلم ریاضی
         </div>
         {/* student PiP */}
         <div

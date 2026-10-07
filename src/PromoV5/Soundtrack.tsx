@@ -36,7 +36,9 @@ const CUES: Cue[] = [
   { at: P + 100, sfx: "whoosh", vol: 0.8 },
   // 2 · solution
   { at: S + 14, sfx: "impact", vol: 1 },
-  { at: S + 22, sfx: "pop", vol: 0.7 },
+  { at: S + 22, sfx: "whoosh", vol: 0.6 },
+  { at: S + 29, sfx: "marker", vol: 0.6 },
+  { at: S + 34, sfx: "pop", vol: 0.6 },
   { at: S + 40, sfx: "swipe", vol: 0.6 },
   { at: S + 48, sfx: "pop", vol: 0.5 },
   { at: S + 50, sfx: "whoosh", vol: 0.5 },

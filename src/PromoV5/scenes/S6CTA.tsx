@@ -6,7 +6,8 @@ import { bounce, clamp01, easeInOut, lerp, pop, prog, wobble } from "../lib/anim
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Avatar, Cutout, PhotoFill } from "../art/Photo";
-import { CheckBadge, DarsoonMark, StarIcon } from "../art/Icons";
+import { CheckBadge, StarIcon } from "../art/Icons";
+import { LogoFull, LogoIcon } from "../art/Brand";
 
 export const CTA_TAP = 64;
 export const CTA_LOGO = 86;
@@ -31,8 +32,7 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
         <div style={{ position: "absolute", top: 14, left: "50%", transform: "translateX(-50%)", width: 150, height: 34, borderRadius: 20, background: COLORS.title }} />
         {/* app bar */}
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "70px 30px 0" }}>
-          <DarsoonMark size={58} />
-          <div style={{ fontFamily: FA, fontWeight: 900, fontSize: 40, color: COLORS.title }}>درسون</div>
+          <LogoFull width={170} />
         </div>
         {/* search */}
         <div
@@ -64,7 +64,7 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
           <Card radius={30} pad={18} style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <Avatar name="face-tutor-chem" size={120} ring={COLORS.ctaBg} style={{ flexShrink: 0 }} />
             <div style={{ fontFamily: FA, flex: 1 }}>
-              <div style={{ fontWeight: 900, fontSize: 32, color: COLORS.title }}>آقای کریمی</div>
+              <div style={{ fontWeight: 900, fontSize: 32, color: COLORS.title }}>علی یوسفی</div>
               <div style={{ fontWeight: 600, fontSize: 24, color: COLORS.secondary }}>ریاضی · برنامه درسی کانادا</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6 }}>
                 {new Array(5).fill(0).map((_, k) => (
@@ -123,10 +123,12 @@ export const S6CTA: React.FC = () => {
   const btnIn = pop(frame, 30, 200, 12);
   const ripple = prog(frame, CTA_TAP, 16);
 
-  // final logo
+  // final call to action: the button flies to the centre, the ن mark lands above it
+  const hero = prog(frame, CTA_LOGO - 8, 14, easeInOut);
+  const heroPulse = frame > CTA_LOGO + 10 ? Math.sin((frame - CTA_LOGO - 10) / 4) * 0.015 : 0;
   const logo = bounce(frame - CTA_LOGO, 500, 9000, 0.32);
   const logoOn = frame >= CTA_LOGO;
-  const dim = prog(frame, CTA_LOGO - 4, 8);
+  const dim = prog(frame, CTA_LOGO - 8, 10);
 
   return (
     <AbsoluteFill>
@@ -150,41 +152,64 @@ export const S6CTA: React.FC = () => {
         <Phone frame={frame} />
       </div>
 
-      {/* CTA button */}
+      {/* dims the app scene for the final call to action */}
+      <AbsoluteFill style={{ background: `rgba(252,249,247,${0.98 * dim})` }} />
+
+      {/* the round ن mark lands above the button */}
+      {logoOn ? (
+        <div
+          style={{
+            position: "absolute",
+            left: 540 - 130,
+            top: 560 - logo.y,
+            transform: `scale(${1 + logo.squash * 0.3}, ${1 - logo.squash * 0.35}) rotate(${wobble(frame - CTA_LOGO - 6, 5)}deg)`,
+            transformOrigin: "50% 100%",
+          }}
+        >
+          <LogoIcon size={260} />
+        </div>
+      ) : null}
+
+      {/* CTA button: tapped in the app, then flies to the centre as the final call to action */}
       <div
         style={{
           position: "absolute",
           left: 0,
           right: 0,
-          top: 1470,
+          top: lerp(1450, 900, hero),
           display: "flex",
           justifyContent: "center",
-          transform: `scale(${btnIn * (1 + press - pressDown)}, ${btnIn * (1 - press * 0.6 - pressDown)})`,
-          opacity: 1 - dim,
+          transform: `scale(${btnIn * (1 + press - pressDown - hero * 0.06 + heroPulse)}, ${btnIn * (1 - press * 0.6 - pressDown - hero * 0.06 + heroPulse)})`,
         }}
       >
         <div
           style={{
             position: "relative",
-            background: COLORS.ctaBg,
-            color: COLORS.ctaText,
+            background: hero > 0.5 ? COLORS.orange : COLORS.ctaBg,
+            color: hero > 0.5 ? "#fff" : COLORS.ctaText,
             fontFamily: FA,
             fontWeight: 900,
-            fontSize: 56,
-            padding: "30px 64px",
-            borderRadius: 80,
+            fontSize: 50,
+            lineHeight: 1.35,
+            textAlign: "center",
+            padding: "30px 56px",
+            borderRadius: 64,
             direction: "rtl",
-            boxShadow: `0 ${pressDown ? 4 : 18}px 0 #f3c9a8, 0 30px 50px -20px rgba(204,112,51,0.5)`,
-            border: `4px solid ${COLORS.ctaText}`,
+            boxShadow: hero > 0.5 ? "0 18px 0 #c94f12, 0 40px 60px -20px rgba(237,95,0,0.6)" : `0 ${pressDown ? 4 : 18}px 0 #f3c9a8, 0 30px 50px -20px rgba(204,112,51,0.5)`,
+            border: `4px solid ${hero > 0.5 ? COLORS.orange : COLORS.ctaText}`,
             display: "flex",
             alignItems: "center",
-            gap: 18,
+            gap: 22,
             overflow: "hidden",
           }}
         >
-          درخواست جلسه معرفی رایگان
-          <svg width={50} height={50} viewBox="0 0 50 50">
-            <path d="M32 12 L18 25 L32 38" fill="none" stroke={COLORS.ctaText} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
+          <div>
+            همین حالا با یک جلسه معرفی رایگان
+            <br />
+            شروع کنید.
+          </div>
+          <svg width={54} height={54} viewBox="0 0 50 50" style={{ flexShrink: 0 }}>
+            <path d="M32 12 L18 25 L32 38" fill="none" stroke={hero > 0.5 ? "#fff" : COLORS.ctaText} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <div
             style={{
@@ -203,12 +228,12 @@ export const S6CTA: React.FC = () => {
       </div>
 
       {/* tapping finger */}
-      {frame < CTA_LOGO ? (
+      {frame < CTA_LOGO - 8 ? (
         <div
           style={{
             position: "absolute",
             left: lerp(900, 250, fingerIn),
-            top: lerp(1900, 1575, fingerIn) + (pressDown ? 10 : 0),
+            top: lerp(1900, 1590, fingerIn) + (pressDown ? 10 : 0),
             transform: `rotate(-18deg) scale(${1 - pressDown})`,
             opacity: fingerIn,
           }}
@@ -218,57 +243,26 @@ export const S6CTA: React.FC = () => {
           </svg>
         </div>
       ) : null}
-      <Burst frame={frame - CTA_TAP} x={540} y={1540} seed={77} count={30} power={36} life={40} />
+      <Burst frame={frame - CTA_TAP} x={540} y={1550} seed={77} count={30} power={36} life={40} />
 
-      {/* final lockup */}
-      <AbsoluteFill style={{ background: `rgba(252,249,247,${0.94 * dim})` }} />
+      {/* website + rating under the button */}
       {logoOn ? (
-        <div style={{ position: "absolute", left: 0, right: 0, top: 760, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 34,
-              direction: "rtl",
-              transform: `translateY(${-logo.y}px) scale(${1 + logo.squash * 0.3}, ${1 - logo.squash * 0.35})`,
-              transformOrigin: "50% 100%",
-            }}
-          >
-            <DarsoonMark size={220} />
-            <div style={{ fontFamily: FA, fontWeight: 900, fontSize: 190, color: COLORS.title, lineHeight: 1 }}>درسون</div>
-          </div>
-          <div style={{ marginTop: 40, fontFamily: EN, fontWeight: 700, fontSize: 56, color: COLORS.orange, letterSpacing: 1, transform: `scale(${pop(frame, CTA_LOGO + 8)})` }}>darsoon.com</div>
-          <div style={{ marginTop: 34, display: "flex", alignItems: "center", gap: 10, transform: `scale(${pop(frame, CTA_LOGO + 12)})` }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 1160, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <svg width={700} height={50} style={{ overflow: "visible" }}>
+            <Marker d="M640 16 C 480 40 220 6 60 30" p={prog(frame, CTA_LOGO + 10, 10)} width={9} />
+          </svg>
+          <div style={{ marginTop: 26, fontFamily: EN, fontWeight: 700, fontSize: 60, color: COLORS.logo, letterSpacing: 1, transform: `scale(${pop(frame, CTA_LOGO + 8)})` }}>darsoon.com</div>
+          <div style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 10 }}>
             {new Array(5).fill(0).map((_, k) => (
               <div key={k} style={{ transform: `scale(${pop(frame, CTA_LOGO + 12 + k * 2)})` }}>
-                <StarIcon size={56} />
+                <StarIcon size={52} />
               </div>
             ))}
           </div>
-          <div
-            style={{
-              marginTop: 50,
-              background: COLORS.ctaBg,
-              color: COLORS.ctaText,
-              fontFamily: FA,
-              fontWeight: 900,
-              fontSize: 50,
-              padding: "24px 56px",
-              borderRadius: 70,
-              direction: "rtl",
-              border: `4px solid ${COLORS.ctaText}`,
-              transform: `scale(${pop(frame, CTA_LOGO + 16)})`,
-            }}
-          >
-            درخواست جلسه معرفی رایگان
-          </div>
-          <svg width={700} height={60} style={{ marginTop: 6, overflow: "visible" }}>
-            <Marker d="M640 20 C 480 44 220 10 60 34" p={prog(frame, CTA_LOGO + 22, 10)} width={9} />
-          </svg>
         </div>
       ) : null}
-      <Shockwave frame={frame - CTA_LOGO - 6} x={540} y={860} max={700} life={24} />
-      <Burst frame={frame - CTA_LOGO - 6} x={540} y={860} seed={91} count={34} power={44} life={34} />
+      <Shockwave frame={frame - CTA_LOGO - 6} x={540} y={690} color={COLORS.logo} max={700} life={24} />
+      <Burst frame={frame - CTA_LOGO - 6} x={540} y={690} seed={91} count={34} power={44} life={34} />
     </AbsoluteFill>
   );
 };

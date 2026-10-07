@@ -9,6 +9,7 @@ import { Avatar, PhotoFill, type PersonPhoto } from "../art/Photo";
 const FACES: PersonPhoto[] = ["face-boy1", "face-girl", "face-boy2", "face-boy5"];
 import { CheckBadge, StarIcon, VideoIcon } from "../art/Icons";
 import { Classroom } from "../art/Classroom";
+import { LogoIcon } from "../art/Brand";
 
 const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
 export const toFa = (s: string) => s.replace(/[0-9]/g, (d) => FA_DIGITS[Number(d)]);
@@ -115,7 +116,10 @@ const GrowthCard: React.FC<{ frame: number }> = ({ frame }) => {
     <div style={{ position: "absolute", left: 60, top: 150, transform: `translateY(${(1 - enter) * -400}px)` }}>
       <Card radius={40} pad={0} style={{ width: 960, height: 400, position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", right: 36, top: 26, fontFamily: FA, fontWeight: 800, fontSize: 36, color: COLORS.title, direction: "rtl" }}>
-          رشد درسون
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
+            <LogoIcon size={44} />
+            رشد
+          </span>
         </div>
         <div
           style={{

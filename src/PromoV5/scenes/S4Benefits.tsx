@@ -164,7 +164,7 @@ const ProgressRing: React.FC<{ frame: number }> = ({ frame }) => {
         <div style={{ fontFamily: FA, fontWeight: 900, fontSize: 110, color: COLORS.title, lineHeight: 1 }}>
           {`٪${"۰۱۲۳۴۵۶۷۸۹".split("").reduce((acc, d, i) => acc.replace(new RegExp(String(i), "g"), d), String(v))}`}
         </div>
-        <div style={{ fontFamily: FA, fontWeight: 700, fontSize: 34, color: COLORS.secondary, direction: "rtl" }}>پیشرفت آرمان</div>
+        <div style={{ fontFamily: FA, fontWeight: 700, fontSize: 34, color: COLORS.secondary, direction: "rtl" }}>پیشرفت رایان</div>
       </div>
     </div>
   );

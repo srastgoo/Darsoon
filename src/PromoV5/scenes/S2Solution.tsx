@@ -1,18 +1,18 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { COLORS } from "../timeline";
 import { FA } from "../fonts";
-import { bounce, clamp01, easeInOut, easeOut, lerp, pop, prog, wobble } from "../lib/anim";
+import { clamp01, easeInOut, easeOut, lerp, pop, prog, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Cutout, PhotoFill, type PersonPhoto } from "../art/Photo";
-import { CheckBadge, DarsoonMark } from "../art/Icons";
+import { CheckBadge } from "../art/Icons";
 import { Classroom } from "../art/Classroom";
 
 const TUTORS = [
-  { name: "خانم احمدی", sub: "زیست‌شناسی", photo: "tutor-bio" as PersonPhoto, pos: "50% 30%" },
-  { name: "خانم رضایی", sub: "ریاضی", photo: "tutor-math" as PersonPhoto, pos: "50% 30%" },
-  { name: "آقای کریمی", sub: "ریاضی · پایه ۹", photo: "tutor-chem" as PersonPhoto, pos: "45% 30%" },
+  { name: "سارا احمدی", sub: "زیست‌شناسی", photo: "tutor-bio" as PersonPhoto, pos: "50% 30%" },
+  { name: "مریم رضایی", sub: "ریاضی", photo: "tutor-math" as PersonPhoto, pos: "50% 30%" },
+  { name: "علی یوسفی", sub: "ریاضی · پایه ۹", photo: "tutor-chem" as PersonPhoto, pos: "45% 30%" },
 ];
 
 const ProfileCard: React.FC<{ frame: number; name: string; sub: string; children: React.ReactNode; tint: string }> = ({ name, sub, children, tint }) => (
@@ -30,22 +30,29 @@ const ProfileCard: React.FC<{ frame: number; name: string; sub: string; children
 export const S2Solution: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // 1) orange iris collapses into the logo square, with squash/stretch landing
-  const collapse = prog(frame, 0, 16, easeInOut);
-  const settle = pop(frame, 14, 260, 9, 0.6);
-  const logoSize = lerp(2400, 230, collapse);
-  const squash = frame >= 14 ? wobble(frame - 14, 0.22, 3.2, 6) : 0;
-  const glyph = prog(frame, 12, 8);
+  // 1) logo-coloured iris collapses into the round ن icon
+  const collapse = prog(frame, 0, 14, easeInOut);
+  const squash = frame >= 14 ? wobble(frame - 14, 0.18, 3.2, 6) : 0;
+  const glyph = prog(frame, 10, 6);
 
-  // 2) lockup moves up to the header
-  const up = prog(frame, 40, 16, easeInOut);
+  // 2) the ن icon flies onto the ن of the full logo while the wordmark wipes in
+  const toNun = prog(frame, 22, 12, easeInOut);
+  const reveal = prog(frame, 28, 12, easeOut);
+  const iconFade = prog(frame, 36, 6);
+  const LOGO_W = 760;
+  const k = LOGO_W / 1537; // logo-full.png is 1537x625
+  const logoLeft = 540 - LOGO_W / 2;
+  const logoTop = 820 - (625 * k) / 2;
+  const iconD = lerp(lerp(2600, 380, collapse), 530 * k, toNun);
+  const iconX = lerp(540, logoLeft + 143 * k, toNun);
+  const iconY = lerp(820, logoTop + 172 * k, toNun);
+
+  // 3) full logo moves up to become the header
+  const up = prog(frame, 42, 14, easeInOut);
   const lockY = lerp(820, 250, up);
-  const lockScale = lerp(1, 0.55, up);
+  const lockScale = lerp(1, 0.62, up);
 
-  // wordmark drops in with physics
-  const wm = bounce(frame - 18, 320, 7000, 0.35);
-
-  // 3) match slot machine
+  // 4) match slot machine
   const matchIn = pop(frame, 50, 170, 15);
   const slot = interpolate(frame, [56, 82], [0, 2], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: easeOut });
   const slotPrev = interpolate(frame - 1, [56, 82], [0, 2], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: easeOut });
@@ -53,7 +60,7 @@ export const S2Solution: React.FC = () => {
   const link = prog(frame, 82, 10);
   const badge = pop(frame, 90, 260, 10);
 
-  // 4) the matched card blooms into the live classroom
+  // 5) the matched card blooms into the live classroom
   const bloom = prog(frame, 102, 16, easeInOut);
   const classP = pop(frame, 104, 150, 16);
   const outro = prog(frame, 138, 12, easeInOut);
@@ -68,7 +75,7 @@ export const S2Solution: React.FC = () => {
         <KineticText
           text={"درسون؛ راه ساده‌تر برای\nپیدا کردن معلم خصوصی"}
           frame={frame}
-          start={44}
+          start={48}
           size={82}
           stagger={3}
           accent={["ساده‌تر", "درسون؛"]}
@@ -103,7 +110,7 @@ export const S2Solution: React.FC = () => {
             </div>
           </div>
           {/* student (right) */}
-          <ProfileCard frame={frame} name="آرمان" sub="ریاضی · پایه ۹" tint="#e7f0fb">
+          <ProfileCard frame={frame} name="رایان" sub="ریاضی · پایه ۹" tint="#e7f0fb">
             <div style={{ position: "absolute", left: -20, bottom: -6 }}>
               <Cutout name="kid-laptop" height={330} frame={frame} seed={2} outline={false} />
             </div>
@@ -156,56 +163,41 @@ export const S2Solution: React.FC = () => {
         </div>
       ) : null}
 
-      {/* logo iris → lockup */}
+      {/* full Darsoon logo (Persian + English) */}
       {frame < 140 ? (
         <div
           style={{
             position: "absolute",
             left: 540,
             top: lockY,
+            width: LOGO_W,
             transform: `translate(-50%, -50%) scale(${lockScale * (1 - outro)})`,
-            display: "flex",
-            alignItems: "center",
-            gap: 30,
-            direction: "rtl",
             opacity: 1 - outro,
           }}
         >
-          <div
-            style={{
-              width: logoSize,
-              height: logoSize * (frame < 16 ? 1.8 - collapse * 0.8 : 1),
-              borderRadius: lerp(0, 70, collapse),
-              background: COLORS.orange,
-              transform: `scale(${(1 + squash) * (0.85 + settle * 0.15)}, ${1 - squash})`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <div style={{ opacity: glyph, transform: `scale(${0.5 + glyph * 0.5})` }}>
-              <DarsoonMark size={230} />
-            </div>
-          </div>
-          <div
-            style={{
-              opacity: frame >= 18 ? 1 : 0,
-              fontFamily: FA,
-              fontWeight: 900,
-              fontSize: 170,
-              color: COLORS.title,
-              transform: `translateY(${-wm.y}px) scale(${1 + wm.squash * 0.2}, ${1 - wm.squash * 0.25})`,
-              transformOrigin: "50% 100%",
-              lineHeight: 1,
-            }}
-          >
-            درسون
-          </div>
+          <Img src={staticFile("v5/brand/logo-full.png")} style={{ width: LOGO_W, display: "block", WebkitMaskImage: `linear-gradient(to right, #000 ${reveal * 110 - 10}%, transparent ${reveal * 110}%)`, maskImage: `linear-gradient(to right, #000 ${reveal * 110 - 10}%, transparent ${reveal * 110}%)` }} />
         </div>
       ) : null}
-      <Shockwave frame={frame - 15} x={540 + 225} y={820} max={520} life={22} />
-      <Burst frame={frame - 15} x={540 + 225} y={820} seed={4} count={26} power={34} />
+
+      {/* ن icon: born from the iris, then lands on the logo's ن */}
+      {iconFade < 1 ? (
+        <div
+          style={{
+            position: "absolute",
+            left: iconX - iconD / 2,
+            top: iconY - iconD / 2,
+            width: iconD,
+            height: iconD,
+            transform: `scale(${1 + squash}, ${1 - squash})`,
+            opacity: 1 - iconFade,
+          }}
+        >
+          <div style={{ position: "absolute", inset: 0, borderRadius: "50%", background: COLORS.logo, opacity: 1 - glyph }} />
+          <Img src={staticFile("v5/brand/logo-icon.png")} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+        </div>
+      ) : null}
+      <Shockwave frame={frame - 15} x={540} y={820} color={COLORS.logo} max={520} life={22} />
+      <Burst frame={frame - 15} x={540} y={820} seed={4} count={26} power={34} />
     </AbsoluteFill>
   );
 };
