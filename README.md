@@ -52,3 +52,22 @@ Found an issue with Remotion? [File an issue here](https://github.com/remotion-d
 ## License
 
 Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+
+## DarsoonLaunch — 30s launch film (`src/PromoV5`)
+
+1080×1920, 30 fps, 900 frames, no voiceover. Six scenes: problem → solution
+(smart match + live class) → five stat moments → three benefit scenes →
+five subjects → CTA. Timing lives in `src/PromoV5/timeline.ts`; every SFX cue
+is listed in `src/PromoV5/Soundtrack.tsx`.
+
+**Brand font (آذرمهر):** add the licensed files as
+`public/fonts/AzarMehr-Regular.ttf` and `public/fonts/AzarMehr-Bold.ttf`.
+They are picked up automatically; until then the film falls back to the
+bundled Vazirmatn. All fonts load locally, so renders need no network.
+
+**Audio:** the music bed and SFX in `public/v5/` are synthesized from code
+(original, license-free). Regenerate with `python3 scripts/film5_audio.py`.
+
+```console
+npx remotion render DarsoonLaunch out/DarsoonLaunch.mp4 --crf=18
+```
