@@ -1,6 +1,6 @@
 import React from "react";
 import { Audio, Sequence, interpolate, staticFile } from "remotion";
-import { BENEFIT_LEN, SCENES, STAT_INTRO, STAT_LEN, SUBJECT_LEN, TOTAL_FRAMES } from "./timeline";
+import { BENEFIT_LEN, MOTION_FRAMES, SCENES, STAT_INTRO, STAT_LEN, SUBJECT_LEN, toOut } from "./timeline";
 import { CTA_LOGO, CTA_TAP } from "./scenes/S6CTA";
 
 type Sfx = "marker" | "click" | "pop" | "whoosh" | "swipe" | "impact" | "ding" | "coin" | "tick" | "thud" | "boing" | "success";
@@ -17,20 +17,18 @@ const U = SCENES.subjects.from;
 const C = SCENES.cta.from;
 const stat = (i: number) => T + STAT_INTRO + i * STAT_LEN - (i === 0 ? 12 : 0);
 
-// Every important hit in the picture has a sound. Frames are absolute.
+// Every important hit in the picture has a sound. Frames are in story time (see SPEED).
 const CUES: Cue[] = [
-  // 1 · problem
-  { at: P + 2, sfx: "marker", vol: 0.55 },
-  { at: P + 12, sfx: "thud", vol: 0.7 },
-  { at: P + 17, sfx: "thud", vol: 0.6 },
-  { at: P + 23, sfx: "thud", vol: 0.55 },
-  { at: P + 18, sfx: "marker", vol: 0.4 },
-  { at: P + 20, sfx: "tick", vol: 0.5 },
-  { at: P + 25, sfx: "tick", vol: 0.5 },
-  { at: P + 30, sfx: "tick", vol: 0.5 },
-  { at: P + 27, sfx: "marker", vol: 0.5 },
-  { at: P + 46, sfx: "boing", vol: 0.55 },
-  { at: P + 52, sfx: "marker", vol: 0.6 },
+  // 1 · problem: the parent types the search, hits Enter, results flood in
+  { at: P + 2, sfx: "pop", vol: 0.5 },
+  ...[10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43].map((f, i): Cue => ({ at: P + f, sfx: "tick", vol: 0.35 + (i % 3) * 0.08 })),
+  { at: P + 12, sfx: "thud", vol: 0.6 },
+  { at: P + 17, sfx: "thud", vol: 0.5 },
+  { at: P + 23, sfx: "thud", vol: 0.45 },
+  { at: P + 6, sfx: "marker", vol: 0.35 },
+  { at: P + 46, sfx: "click", vol: 0.9 },
+  { at: P + 50, sfx: "swipe", vol: 0.6 },
+  { at: P + 58, sfx: "swipe", vol: 0.4 },
   { at: P + 71, sfx: "thud", vol: 0.9 },
   { at: P + 72, sfx: "boing", vol: 0.5 },
   { at: P + 100, sfx: "whoosh", vol: 0.8 },
@@ -114,10 +112,10 @@ export const Soundtrack: React.FC = () => (
   <>
     <Audio
       src={staticFile("v5/music.mp3")}
-      volume={(f) => interpolate(f, [0, 6, TOTAL_FRAMES - 20, TOTAL_FRAMES], [0, 0.5, 0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
+      volume={(f) => interpolate(f, [0, 6, MOTION_FRAMES - 24, MOTION_FRAMES], [0, 0.5, 0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
     />
     {CUES.map((c, i) => (
-      <Sequence key={i} from={Math.max(0, Math.round(c.at))} durationInFrames={60} name={`sfx ${c.sfx}`}>
+      <Sequence key={i} from={Math.max(0, toOut(c.at))} durationInFrames={60} name={`sfx ${c.sfx}`}>
         <Audio src={staticFile(`v5/sfx-${c.sfx}.mp3`)} volume={() => (c.vol ?? 1) * SFX_GAIN} />
       </Sequence>
     ))}

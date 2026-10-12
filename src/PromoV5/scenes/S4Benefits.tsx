@@ -1,6 +1,7 @@
 import React from "react";
-import { AbsoluteFill, Sequence, useCurrentFrame } from "remotion";
-import { BENEFIT_LEN, COLORS } from "../timeline";
+import { AbsoluteFill, Sequence } from "remotion";
+import { useStoryFrame } from "../lib/time";
+import { BENEFIT_LEN, COLORS, toOut } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, easeInOut, easeOut, jitter, pendulum, pop, prog, rand, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
@@ -103,7 +104,7 @@ const Curriculum: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 const BenefitCanada: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
   const teacherIn = pop(frame, 14, 170, 14);
   return (
     <AbsoluteFill>
@@ -231,7 +232,7 @@ const Feedback: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 const BenefitPersonal: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
   const path = prog(frame, 6, 34, easeInOut);
   const kid = bounce(frame - 40, 60, 5000, 0.4);
   return (
@@ -332,7 +333,7 @@ const PriceTag: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 const BenefitPrice: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
   const heart = pop(frame, 34, 260, 9);
   return (
     <AbsoluteFill>
@@ -368,13 +369,13 @@ const BenefitPrice: React.FC = () => {
 
 export const S4Benefits: React.FC = () => (
   <AbsoluteFill>
-    <Sequence durationInFrames={BENEFIT_LEN} name="Canada curriculum">
+    <Sequence durationInFrames={toOut(BENEFIT_LEN)} name="Canada curriculum">
       <BenefitCanada />
     </Sequence>
-    <Sequence from={BENEFIT_LEN} durationInFrames={BENEFIT_LEN} name="Personalised">
+    <Sequence from={toOut(BENEFIT_LEN)} durationInFrames={toOut(2 * BENEFIT_LEN) - toOut(BENEFIT_LEN)} name="Personalised">
       <BenefitPersonal />
     </Sequence>
-    <Sequence from={BENEFIT_LEN * 2} durationInFrames={BENEFIT_LEN} name="Price">
+    <Sequence from={toOut(BENEFIT_LEN * 2)} durationInFrames={toOut(3 * BENEFIT_LEN) - toOut(2 * BENEFIT_LEN)} name="Price">
       <BenefitPrice />
     </Sequence>
   </AbsoluteFill>

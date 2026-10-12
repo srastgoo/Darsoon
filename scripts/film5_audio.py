@@ -1,6 +1,6 @@
 """Procedural audio for the DarsoonLaunch film (src/PromoV5).
 
-Generates an original 120 BPM uplifting music bed and a kit of short SFX,
+Generates an original uplifting music bed (120 BPM × FILM_SPEED) and a kit of short SFX,
 written as mp3 into public/v5/. Pure numpy + ffmpeg, no samples, so the
 output is fully owned and license-free.
 
@@ -20,10 +20,14 @@ import tempfile
 import numpy as np
 
 SR = 44100
-BPM = 120
+# Must equal SPEED in src/PromoV5/timeline.ts: the film is authored at 120 BPM
+# (1 beat = 15 frames) and played back slower, so the music slows with it.
+FILM_SPEED = 0.85
+BPM = 120 * FILM_SPEED
 BEAT = 60 / BPM
 BAR = BEAT * 4
-LENGTH = 31.0
+FILM_BARS = 15  # the motion film is 15 bars long
+LENGTH = (FILM_BARS + 0.5) * 4 * 60 / BPM
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "v5")
 
 rng = np.random.default_rng(7)
@@ -179,7 +183,7 @@ def build_music():
 
     for bar, (root, tones) in enumerate(PROGRESSION):
         t0 = bar * BAR
-        if t0 >= 30:
+        if bar >= FILM_BARS:
             break
         intro = bar < 2
         outro = bar >= 13
@@ -227,10 +231,10 @@ def build_music():
 
     # bells on the CTA bar
     for i, m in enumerate([74, 78, 81, 86]):
-        place(music, bell(midi_hz(m), 1.6), 26.0 + i * 0.125, 0.16)
+        place(music, bell(midi_hz(m), 1.6), 13 * BAR + i * BEAT / 4, 0.16)
 
     # riser into the drop (2.0 s -> 4.0 s)
-    rdur = 1.9
+    rdur = 0.95 * BAR
     t = t_axis(rdur)
     noise = rng.standard_normal(len(t))
     riser = np.zeros_like(t)
@@ -240,13 +244,13 @@ def build_music():
         lo = 400 + 5000 * (c / chunks) ** 2
         riser[a:b] = fft_filter(noise[a:b], lo=lo, hi=lo * 2.2)
     riser *= (t / rdur) ** 2 * 0.5
-    place(music, riser, 4.0 - rdur, 1.0)
+    place(music, riser, 2 * BAR - rdur, 1.0)
 
     music = reverb(music, 2.2, 0.3)
     mix = music * sidechain + bassbus * sidechain + drums * 0.9
     # fades
     tt = np.arange(n) / SR
-    mix *= np.clip(tt / 0.15, 0, 1) * np.clip((30.0 - tt) / 1.2, 0, 1)
+    mix *= np.clip(tt / 0.15, 0, 1) * np.clip((FILM_BARS * BAR - tt) / 1.2, 0, 1)
     mix = np.tanh(mix * 1.25)
     mix /= np.max(np.abs(mix)) + 1e-9
     return mix * 0.89
@@ -410,5 +414,6 @@ def write_mp3(name, sig, stereo_width=0.0):
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
     write_mp3("music.mp3", build_music(), stereo_width=0.35)
+    rng = np.random.default_rng(11)
     for name, fn in SFX.items():
         write_mp3(f"sfx-{name}.mp3", fn())

@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame } from "remotion";
+import { AbsoluteFill } from "remotion";
+import { useStoryFrame } from "../lib/time";
 import { COLORS, SUBJECT_INTRO, SUBJECT_LEN } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeInOut, easeOut, lerp, pop, prog, rand, wobble } from "../lib/anim";
@@ -271,7 +272,7 @@ export const SUBJECTS: Subject[] = [
 ];
 
 export const S5Subjects: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
   return (
     <AbsoluteFill style={{ background: COLORS.canvas }}>
       {SUBJECTS.map((sub, i) => {

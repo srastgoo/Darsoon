@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, interpolate, staticFile } from "remotion";
+import { useStoryFrame } from "../lib/time";
 import { COLORS } from "../timeline";
 import { FA } from "../fonts";
 import { clamp01, easeInOut, easeOut, lerp, pop, prog, wobble } from "../lib/anim";
@@ -28,7 +29,7 @@ const ProfileCard: React.FC<{ frame: number; name: string; sub: string; children
 );
 
 export const S2Solution: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
 
   // 1) logo-coloured iris collapses into the round ن icon
   const collapse = prog(frame, 0, 14, easeInOut);

@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, interpolate } from "remotion";
+import { useStoryFrame } from "../lib/time";
 import { COLORS, STAT_INTRO, STAT_LEN } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeIn, easeInOut, easeOut, lerp, pop, prog, rand, wobble } from "../lib/anim";
@@ -402,7 +403,7 @@ const RatingDrop: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 export const S3Stats: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
   return (
     <AbsoluteFill>
       <Paper />

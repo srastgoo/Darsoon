@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame } from "remotion";
+import { AbsoluteFill } from "remotion";
+import { useStoryFrame } from "../lib/time";
 import { COLORS } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeInOut, lerp, pop, prog, wobble } from "../lib/anim";
@@ -109,7 +110,7 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 export const S6CTA: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
 
   // zoom-through: start inside the phone screen, pull back to reveal it
   const pull = prog(frame, 0, 16, easeInOut);

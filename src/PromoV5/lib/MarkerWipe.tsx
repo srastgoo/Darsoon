@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame } from "remotion";
+import { AbsoluteFill } from "remotion";
+import { useStoryFrame } from "./time";
 import { COLORS } from "../timeline";
 import { easeIn, easeOut, prog } from "./anim";
 
@@ -17,7 +18,7 @@ export const MarkerWipe: React.FC<{ cover?: number; reveal?: number; color?: str
   color = COLORS.orange,
   reverse,
 }) => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
   const head = prog(frame, 0, cover, easeIn);
   const tail = prog(frame, cover, reveal, easeOut);
   if (frame > cover + reveal) return null;

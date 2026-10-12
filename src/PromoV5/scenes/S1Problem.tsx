@@ -1,10 +1,10 @@
 import React from "react";
-import { AbsoluteFill, useCurrentFrame } from "remotion";
+import { AbsoluteFill } from "remotion";
+import { useStoryFrame } from "../lib/time";
 import { COLORS } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeIn, easeInOut, jitter, pop, prog, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
-import { KineticText } from "../lib/KineticText";
 import { Cutout } from "../art/Photo";
 import { LaptopIcon } from "../art/Icons";
 
@@ -82,17 +82,115 @@ const Book: React.FC<{ frame: number; at: number; x: number; ground: number; w: 
   );
 };
 
+const QUERY = "معلم خصوصی آنلاین در تورنتو";
+export const TYPE_START = 8;
+export const TYPE_END = 44;
+export const ENTER_AT = 47;
+
+/** One placeholder search result (no real sites): favicon, domain, title, snippet. */
+const ResultRow: React.FC<{ k: number }> = ({ k }) => {
+  const w = (a: number) => `${55 + ((k * 37 + a * 23) % 40)}%`;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "18px 0", borderBottom: "2px solid #f3eee9" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ width: 30, height: 30, borderRadius: 15, background: ["#ffd8c2", "#d6e6fb", "#d9f1ec", "#e8ddfa"][k % 4] }} />
+        <div style={{ width: 160, height: 12, borderRadius: 6, background: "#e9e3de" }} />
+      </div>
+      <div style={{ width: w(1), height: 22, borderRadius: 8, background: "#9fb6ec" }} />
+      <div style={{ width: w(2), height: 12, borderRadius: 6, background: "#ece6e1" }} />
+      <div style={{ width: w(3), height: 12, borderRadius: 6, background: "#ece6e1" }} />
+    </div>
+  );
+};
+
+/**
+ * Search page the parent types into: the query is typed letter by letter, Enter
+ * is pressed, then an endless list of look-alike results pours in and scrolls.
+ * Deliberately generic (no search-engine logo or name).
+ */
+const SearchPanel: React.FC<{ frame: number }> = ({ frame }) => {
+  const enter = pop(frame, 0, 170, 15);
+  const chars = Math.floor(clamp01((frame - TYPE_START) / (TYPE_END - TYPE_START)) * QUERY.length);
+  const typed = QUERY.slice(0, chars);
+  const pressed = frame >= ENTER_AT - 1 && frame < ENTER_AT + 3;
+  const open = prog(frame, ENTER_AT + 2, 10, easeInOut);
+  const scroll = Math.max(0, frame - ENTER_AT - 8);
+  const scrollV = frame > ENTER_AT + 8 ? 13 : 0;
+  const exit = prog(frame, 98, 10, easeIn);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: 60,
+        right: 60,
+        top: 190,
+        transform: `translateY(${(1 - enter) * -300 - exit * 900}px)`,
+        opacity: 1 - exit,
+        direction: "rtl",
+        fontFamily: FA,
+      }}
+    >
+      <Card radius={40} pad={0} style={{ overflow: "hidden" }}>
+        {/* search box */}
+        <div style={{ display: "flex", alignItems: "center", gap: 18, padding: "24px 30px" }}>
+          <svg width={46} height={46} viewBox="0 0 40 40" style={{ flexShrink: 0 }}>
+            <circle cx={17} cy={17} r={11} fill="none" stroke={COLORS.secondary} strokeWidth={4} />
+            <path d="M26 26 L35 35" stroke={COLORS.secondary} strokeWidth={4} strokeLinecap="round" />
+          </svg>
+          <div style={{ flex: 1, fontWeight: 700, fontSize: 46, color: COLORS.title, whiteSpace: "nowrap", overflow: "hidden", minHeight: 64, display: "flex", alignItems: "center" }}>
+            {typed}
+            <span style={{ display: "inline-block", width: 4, height: 54, marginRight: 4, background: COLORS.orange, opacity: frame < ENTER_AT && Math.floor(frame / 7) % 2 === 0 ? 1 : 0 }} />
+          </div>
+          <div
+            style={{
+              flexShrink: 0,
+              width: 96,
+              height: 96,
+              borderRadius: 48,
+              background: COLORS.orange,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transform: `scale(${pressed ? 0.86 : 1 + wobble(frame - ENTER_AT - 3, 0.08, 3, 7)})`,
+              boxShadow: pressed ? "none" : "0 10px 20px -8px rgba(237,95,0,0.7)",
+            }}
+          >
+            <svg width={48} height={48} viewBox="0 0 40 40">
+              <circle cx={17} cy={17} r={10} fill="none" stroke="#fff" strokeWidth={4.5} />
+              <path d="M25 25 L34 34" stroke="#fff" strokeWidth={4.5} strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+        {/* results pour in and keep scrolling: too many options, nothing clear */}
+        <div style={{ height: 470 * open, overflow: "hidden", borderTop: open > 0 ? "2px solid #f3eee9" : undefined, position: "relative" }}>
+          <div
+            style={{
+              padding: "0 34px",
+              transform: `translateY(${-scroll * scrollV}px)`,
+              filter: scrollV ? "blur(1.2px)" : undefined,
+            }}
+          >
+            {new Array(14).fill(0).map((_, k) => (
+              <ResultRow key={k} k={k} />
+            ))}
+          </div>
+          <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 120, background: "linear-gradient(rgba(255,255,255,0), #fff)" }} />
+        </div>
+      </Card>
+    </div>
+  );
+};
+
 export const S1Problem: React.FC = () => {
-  const frame = useCurrentFrame();
+  const frame = useStoryFrame();
 
   // camera: gentle push-in, then a quick zoom towards the question mark dot at the end
   const push = 1 + frame * 0.0008;
   const outro = prog(frame, 100, 17, easeIn);
 
-  // laptop search -> "no results"
-  const typed = "Math tutor near me".slice(0, Math.floor(clamp01((frame - 18) / 22) * 18));
-  const noResult = pop(frame, 46);
-  const shake = frame > 46 && frame < 60 ? Math.sin(frame * 2.4) * 10 * (1 - (frame - 46) / 14) : 0;
+  // the same search mirrored on the student's laptop; a little jolt when results flood in
+  const typedLen = clamp01((frame - TYPE_START) / (TYPE_END - TYPE_START));
+  const shake = frame > ENTER_AT + 4 && frame < ENTER_AT + 18 ? Math.sin(frame * 2.4) * 8 * (1 - (frame - ENTER_AT - 4) / 14) : 0;
 
   // student
   const studentIn = pop(frame, 2, 160, 14);
@@ -143,15 +241,14 @@ export const S1Problem: React.FC = () => {
           size={410}
           screen={
             <g>
-              <rect x="36" y="22" width="88" height="14" rx="7" fill="#f2ece7" />
-              <text x="42" y="32.5" fontFamily={EN} fontSize="7.5" fill={COLORS.title} fontWeight={500}>
-                {typed}
-                {frame % 16 < 8 && frame < 46 ? "|" : ""}
-              </text>
-              <g transform={`translate(80 56) scale(${noResult})`}>
-                <circle r="11" fill={COLORS.red} opacity={0.12} />
-                <path d="M-5 -5 L5 5 M5 -5 L-5 5" stroke={COLORS.red} strokeWidth="3" strokeLinecap="round" />
-              </g>
+              <rect x="36" y="20" width="88" height="12" rx="6" fill="#f2ece7" />
+              <rect x={120 - 78 * typedLen} y="24.5" width={78 * typedLen} height="3" rx="1.5" fill={COLORS.title} opacity={0.5} />
+              {new Array(4).fill(0).map((_, k) => (
+                <g key={k} opacity={clamp01((frame - ENTER_AT - 2 - k * 2) / 4)}>
+                  <rect x={60 - (k % 2) * 10} y={38 + k * 9} width={64 + (k % 2) * 10} height="3" rx="1.5" fill="#9fb6ec" />
+                  <rect x={76} y={42 + k * 9} width={48} height="2" rx="1" fill="#e2dbd5" />
+                </g>
+              ))}
             </g>
           }
         />
@@ -163,36 +260,7 @@ export const S1Problem: React.FC = () => {
       <Book frame={frame} at={20} x={905} ground={1594} w={160} h={48} color={COLORS.purple} rot={-8} h0={1000} />
       <Shockwave frame={frame - 15} x={985} y={1700} color={COLORS.title} max={180} />
 
-      {/* "no results" sticker */}
-      <div
-        style={{
-          position: "absolute",
-          left: 430,
-          top: 1270,
-          transform: `rotate(-6deg) scale(${noResult})`,
-          transformOrigin: "0% 100%",
-        }}
-      >
-        <Card radius={24} pad={18} style={{ fontFamily: FA, fontWeight: 800, fontSize: 34, color: COLORS.red, whiteSpace: "nowrap" }}>
-          نتیجه‌ای پیدا نشد
-        </Card>
-      </div>
-
-      {/* headline */}
-      <div style={{ position: "absolute", top: 210, left: 0, right: 0 }}>
-        <KineticText text={"برای درس‌های مدرسه،"} frame={frame} start={10} size={76} weight={800} color={COLORS.secondary} exitAt={100} />
-        <div style={{ height: 12 }} />
-        <KineticText
-          text={"معلم خصوصی مناسب\nپیدا نکردی؟"}
-          frame={frame}
-          start={22}
-          size={108}
-          stagger={4}
-          accent={["مناسب"]}
-          circle={["مناسب"]}
-          exitAt={100}
-        />
-      </div>
+      <SearchPanel frame={frame} />
 
       {/* big physics question mark */}
       {qVisible ? (

@@ -9,7 +9,7 @@ import { TOTAL_DURATION_V3 } from "./PromoV3/durations";
 import { DarsoonFilm } from "./PromoV4/DarsoonFilm";
 import { TOTAL_DURATION_V4 } from "./PromoV4/durations";
 import { DarsoonLaunch, DarsoonMotion } from "./PromoV5/DarsoonLaunch";
-import { FPS as FPS_V5, HEIGHT as HEIGHT_V5, FILM_FRAMES as FILM_FRAMES_V5, TOTAL_FRAMES as TOTAL_FRAMES_V5, WIDTH as WIDTH_V5 } from "./PromoV5/timeline";
+import { FPS as FPS_V5, HEIGHT as HEIGHT_V5, FILM_FRAMES as FILM_FRAMES_V5, MOTION_FRAMES as MOTION_FRAMES_V5, WIDTH as WIDTH_V5 } from "./PromoV5/timeline";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -57,7 +57,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="DarsoonMotion"
         component={DarsoonMotion}
-        durationInFrames={TOTAL_FRAMES_V5}
+        durationInFrames={MOTION_FRAMES_V5}
         fps={FPS_V5}
         width={WIDTH_V5}
         height={HEIGHT_V5}

@@ -12,13 +12,20 @@ export const SCENES = {
   cta: { from: 780, dur: 120 },
 } as const;
 
-export const TOTAL_FRAMES = 900; // the motion-graphics film on its own
+export const TOTAL_FRAMES = 900; // motion film length in "story" frames (all scene timings use these)
+
+// Playback speed of the motion film. Scenes are authored at story time; the film
+// is rendered slower than that (0.85 → ~15% slower) so the pace stays readable.
+// Keep FILM_SPEED in scripts/film5_audio.py equal to this so the music stays on beat.
+export const SPEED = 0.85;
+export const toOut = (storyFrames: number) => Math.round(storyFrames / SPEED);
+export const MOTION_FRAMES = toOut(TOTAL_FRAMES);
 
 // Full ad = client's 7s talking-head hook, a paper-toss hand-off, then the motion film.
 export const HOOK_FREEZE = 210; // hook clip plays to 7.0s, then freezes (she smiles at the lens)
 export const TOSS_LEN = 22; // freeze → polaroid → crumple, before the motion film starts
 export const MOTION_FROM = HOOK_FREEZE + TOSS_LEN;
-export const FILM_FRAMES = MOTION_FROM + TOTAL_FRAMES;
+export const FILM_FRAMES = MOTION_FROM + MOTION_FRAMES;
 
 // Each stat is its own 30-frame moment after a 30-frame dashboard build.
 export const STAT_INTRO = 30;
