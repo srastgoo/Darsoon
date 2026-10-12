@@ -13,7 +13,7 @@ import { Classroom } from "../art/Classroom";
 const TUTORS = [
   { name: "محسن رحیمی", sub: "زیست‌شناسی", photo: "mohsen-rahimi" as PersonPhoto, pos: "50% 35%" },
   { name: "مریم رضایی", sub: "ریاضی", photo: "tutor-math" as PersonPhoto, pos: "50% 30%" },
-  { name: "نگار سیدین", sub: "ریاضی · پایه ۹", photo: "negar-seyyedin" as PersonPhoto, pos: "40% 30%" },
+  { name: "نگار سیدین", sub: "معلم خصوصی ریاضی", photo: "negar-seyyedin" as PersonPhoto, pos: "40% 30%" },
 ];
 
 const ProfileCard: React.FC<{ frame: number; name: string; sub: string; children: React.ReactNode; tint: string }> = ({ name, sub, children, tint }) => (

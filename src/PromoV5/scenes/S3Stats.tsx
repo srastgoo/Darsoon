@@ -317,8 +317,7 @@ const TutorFan: React.FC<{ frame: number }> = ({ frame }) => {
   const tutors: { photo: PersonPhoto; pos: string }[] = [
     // Darsoon's own tutors (client-supplied photos)
     { photo: "faryal-bagheri", pos: "50% 30%" },
-    { photo: "team-3", pos: "50% 30%" },
-    { photo: "tara-rasti", pos: "50% 30%" },
+    { photo: "hamidreza-joshaghani", pos: "50% 15%" },
     { photo: "mohsen-rahimi", pos: "50% 30%" },
     { photo: "negar-seyyedin", pos: "42% 25%" },
   ];

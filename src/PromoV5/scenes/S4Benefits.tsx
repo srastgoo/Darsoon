@@ -123,12 +123,13 @@ const BenefitCanada: React.FC = () => {
       <div style={{ position: "absolute", left: 540, top: 1290, transform: `translateX(${(1 - teacherIn) * 600}px) rotate(${4 - (1 - teacherIn) * 10}deg)` }}>
         <Card radius={30} pad={12} style={{ width: 500, position: "relative" }}>
           <div style={{ width: 476, height: 308, borderRadius: 22, overflow: "hidden" }}>
-            <div style={{ width: "100%", height: "100%", transform: `scale(${1.02 + frame * 0.001})` }}>
-              <PhotoFill name="tara-rasti" position="50% 38%" />
+            {/* top-anchored crop and push-in so his whole face and hair stay in frame */}
+            <div style={{ width: "100%", height: "100%", transform: `scale(${1 + frame * 0.0006})`, transformOrigin: "50% 25%" }}>
+              <PhotoFill name="hamidreza-joshaghani" position="50% 0%" />
             </div>
           </div>
           <div style={{ position: "absolute", right: 16, bottom: 14, background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: "4px 14px", fontFamily: FA, fontWeight: 800, fontSize: 24, color: COLORS.title, direction: "rtl" }}>
-            تارا راستی
+            حمیدرضا جوشقانی
           </div>
           <div style={{ position: "absolute", left: 28, top: 26, display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 20, padding: "4px 14px", fontFamily: FA, fontWeight: 800, fontSize: 24, color: COLORS.red }}>
             <div style={{ width: 10, height: 10, borderRadius: 5, background: COLORS.red, opacity: frame % 30 < 18 ? 1 : 0.3 }} />
