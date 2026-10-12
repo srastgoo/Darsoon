@@ -142,7 +142,10 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
         transform: `translateY(${(1 - pop(f, 6, 170, 14)) * 500}px) rotate(-3deg)`,
       }}
     >
-      <PhotoFill name="tutor-bio-wide" position="50% 50%" />
+      <PhotoFill name="faryal-bagheri" position="50% 30%" />
+      <div style={{ position: "absolute", right: 16, bottom: 14, background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: "4px 16px", fontFamily: FA, fontWeight: 800, fontSize: 28, color: COLORS.title, direction: "rtl" }}>
+        فریال باقری · زیست‌شناسی
+      </div>
     </div>
     </>
   );

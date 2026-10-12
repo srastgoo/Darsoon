@@ -18,8 +18,21 @@ export const TOTAL_FRAMES = 900; // motion film length in "story" frames (all sc
 // is rendered slower than that (0.85 → ~15% slower) so the pace stays readable.
 // Keep FILM_SPEED in scripts/film5_audio.py equal to this so the music stays on beat.
 export const SPEED = 0.85;
-export const toOut = (storyFrames: number) => Math.round(storyFrames / SPEED);
+// The opening search scene runs a little quicker than the rest to keep the hook's energy.
+export const OPENING_SPEED = 1.05;
+const OPENING = SCENES.problem.dur;
+
+/** Story frame (absolute, from the start of the motion film) → output frame. */
+export const toOut = (storyFrames: number) =>
+  Math.round(
+    storyFrames <= OPENING ? storyFrames / OPENING_SPEED : OPENING / OPENING_SPEED + (storyFrames - OPENING) / SPEED,
+  );
+/** A story-time duration inside the normal-speed part of the film → output frames. */
+export const span = (storyFrames: number) => Math.round(storyFrames / SPEED);
 export const MOTION_FRAMES = toOut(TOTAL_FRAMES);
+// The music bed is written for SPEED throughout; trimming its start by the time the
+// faster opening saves keeps every beat landing on its cut.
+export const MUSIC_TRIM = Math.round(OPENING / SPEED - OPENING / OPENING_SPEED);
 
 // Full ad = client's 7s talking-head hook, a paper-toss hand-off, then the motion film.
 export const HOOK_FREEZE = 210; // hook clip plays to 7.0s, then freezes (she smiles at the lens)

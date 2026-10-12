@@ -16,11 +16,12 @@ const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
 export const toFa = (s: string) => s.replace(/[0-9]/g, (d) => FA_DIGITS[Number(d)]);
 const faInt = (n: number) => toFa(Math.round(n).toLocaleString("en-US")).replace(/,/g, "٬");
 
+// Darsoon's figures as supplied by the client.
 const STATS = [
-  { value: 200000, label: "جلسه برگزار شده", fmt: (n: number) => `+${faInt(n)}` },
-  { value: 7000, label: "شاگرد", fmt: (n: number) => `+${faInt(n)}` },
-  { value: 130, label: "موضوع آموزشی", fmt: (n: number) => `+${faInt(n)}` },
-  { value: 250, label: "معلم متخصص", fmt: (n: number) => `+${faInt(n)}` },
+  { value: 200000, label: "جلسه", fmt: (n: number) => `+${faInt(n)}` },
+  { value: 7000, label: "شاگرد", fmt: (n: number) => `+${toFa(String(Math.round(n)))}` },
+  { value: 130, label: "رشته", fmt: (n: number) => `+${faInt(n)}` },
+  { value: 250, label: "معلم", fmt: (n: number) => `+${faInt(n)}` },
   { value: 4.9, label: "میانگین امتیازها", fmt: (n: number) => toFa(n.toFixed(1)) },
 ];
 
@@ -315,10 +316,11 @@ const TutorFan: React.FC<{ frame: number }> = ({ frame }) => {
   const fan = pop(frame, start, 150, 14);
   const tutors: { photo: PersonPhoto; pos: string }[] = [
     // Darsoon's own tutors (client-supplied photos)
-    { photo: "team-4", pos: "50% 30%" },
+    { photo: "faryal-bagheri", pos: "50% 30%" },
     { photo: "team-3", pos: "50% 30%" },
-    { photo: "team-1", pos: "50% 30%" },
-    { photo: "team-2", pos: "50% 30%" },
+    { photo: "tara-rasti", pos: "50% 30%" },
+    { photo: "mohsen-rahimi", pos: "50% 30%" },
+    { photo: "negar-seyyedin", pos: "42% 25%" },
   ];
   return (
     <div style={{ position: "absolute", left: 540, top: 1820, opacity: 1 - out, transform: `translateY(${out * 300}px)` }}>

@@ -73,7 +73,8 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
       >
         {/* real tutor webcam, slow push-in so the frame feels live */}
         <div style={{ position: "absolute", inset: 0, transform: `scale(${1.04 + f * 0.0009})`, transformOrigin: "60% 35%" }}>
-          <PhotoFill name="tutor-chem" position="40% 30%" />
+          {/* نگار سیدین on a live video call */}
+          <PhotoFill name="negar-seyyedin" position="45% 32%" />
         </div>
         <div
           style={{
@@ -89,7 +90,7 @@ export const Classroom: React.FC<{ frame: number; still?: boolean }> = ({ frame,
             color: COLORS.title,
           }}
         >
-          علی یوسفی · معلم ریاضی
+          نگار سیدین · معلم ریاضی
         </div>
         {/* student PiP */}
         <div

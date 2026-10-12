@@ -21,7 +21,12 @@ export type PersonPhoto =
   | "team-1"
   | "team-2"
   | "team-3"
-  | "team-4";
+  | "team-4"
+  // Darsoon tutors (client-supplied, named)
+  | "negar-seyyedin"
+  | "mohsen-rahimi"
+  | "tara-rasti"
+  | "faryal-bagheri";
 
 export const photoSrc = (name: PersonPhoto) => staticFile(`v5/people/${name}.webp`);
 
@@ -81,7 +86,14 @@ export const PhotoFill: React.FC<{ name: PersonPhoto; position?: string; zoom?: 
 );
 
 /** Round face avatar with a coloured ring. */
-export const Avatar: React.FC<{ name: PersonPhoto; size: number; ring?: string; style?: React.CSSProperties }> = ({ name, size, ring = "#fff", style }) => (
+export const Avatar: React.FC<{ name: PersonPhoto; size: number; ring?: string; style?: React.CSSProperties; position?: string; zoom?: number }> = ({
+  name,
+  size,
+  ring = "#fff",
+  style,
+  position = "50% 50%",
+  zoom = 1,
+}) => (
   <div
     style={{
       width: size,
@@ -94,6 +106,9 @@ export const Avatar: React.FC<{ name: PersonPhoto; size: number; ring?: string; 
       ...style,
     }}
   >
-    <Img src={photoSrc(name)} style={{ width: "100%", height: "100%", display: "block" }} />
+    <Img
+      src={photoSrc(name)}
+      style={{ width: "100%", height: "100%", display: "block", objectFit: "cover", objectPosition: position, transform: zoom !== 1 ? `scale(${zoom})` : undefined, transformOrigin: position }}
+    />
   </div>
 );

@@ -11,9 +11,9 @@ import { CheckBadge } from "../art/Icons";
 import { Classroom } from "../art/Classroom";
 
 const TUTORS = [
-  { name: "سارا احمدی", sub: "زیست‌شناسی", photo: "tutor-bio" as PersonPhoto, pos: "50% 30%" },
+  { name: "محسن رحیمی", sub: "زیست‌شناسی", photo: "mohsen-rahimi" as PersonPhoto, pos: "50% 35%" },
   { name: "مریم رضایی", sub: "ریاضی", photo: "tutor-math" as PersonPhoto, pos: "50% 30%" },
-  { name: "علی یوسفی", sub: "ریاضی · پایه ۹", photo: "tutor-chem" as PersonPhoto, pos: "45% 30%" },
+  { name: "نگار سیدین", sub: "ریاضی · پایه ۹", photo: "negar-seyyedin" as PersonPhoto, pos: "40% 30%" },
 ];
 
 const ProfileCard: React.FC<{ frame: number; name: string; sub: string; children: React.ReactNode; tint: string }> = ({ name, sub, children, tint }) => (
@@ -122,27 +122,6 @@ export const S2Solution: React.FC = () => {
           </svg>
           <div style={{ position: "absolute", left: 540 - 56, top: 224, transform: `scale(${badge})` }}>
             <CheckBadge size={112} p={prog(frame, 92, 8)} />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              left: 540 - 160,
-              top: 610,
-              width: 320,
-              textAlign: "center",
-              transform: `scale(${badge}) rotate(${wobble(frame - 90, 6)}deg)`,
-              background: COLORS.orange,
-              color: "#fff",
-              borderRadius: 40,
-              padding: "10px 0",
-              fontFamily: FA,
-              fontWeight: 900,
-              fontSize: 46,
-              direction: "rtl",
-              boxShadow: "0 16px 30px -10px rgba(237,95,0,0.6)",
-            }}
-          >
-            ۹۸٪ تطابق
           </div>
         </div>
       ) : null}

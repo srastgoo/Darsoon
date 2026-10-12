@@ -1,6 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
-import { COLORS, HOOK_FREEZE, MOTION_FRAMES, MOTION_FROM, SCENES, toOut } from "./timeline";
+import { COLORS, HOOK_FREEZE, MOTION_FRAMES, MOTION_FROM, OPENING_SPEED, SCENES, span, toOut } from "./timeline";
+import { SpeedContext } from "./lib/time";
 import "./fonts";
 import { RoughDefs } from "./lib/visual";
 import { S1Problem } from "./scenes/S1Problem";
@@ -19,7 +20,9 @@ export const DarsoonMotion: React.FC = () => (
   <AbsoluteFill style={{ background: COLORS.canvas, overflow: "hidden" }}>
     <RoughDefs />
     <Sequence from={toOut(SCENES.problem.from)} durationInFrames={toOut(SCENES.problem.from + SCENES.problem.dur) - toOut(SCENES.problem.from)} name="1 · Problem">
-      <S1Problem />
+      <SpeedContext.Provider value={OPENING_SPEED}>
+        <S1Problem />
+      </SpeedContext.Provider>
     </Sequence>
     <Sequence from={toOut(SCENES.solution.from)} durationInFrames={toOut(SCENES.solution.from + SCENES.solution.dur) - toOut(SCENES.solution.from)} name="2 · Solution">
       <S2Solution />
@@ -40,7 +43,7 @@ export const DarsoonMotion: React.FC = () => (
 
     {/* marker-scribble transitions (cut happens under full cover) */}
     {[0, 1, 2].map((k) => (
-      <Sequence key={k} from={toOut(SCENES.benefits.from + k * BENEFIT_LEN - 9)} durationInFrames={toOut(20)} name={`Marker wipe ${k + 1}`}>
+      <Sequence key={k} from={toOut(SCENES.benefits.from + k * BENEFIT_LEN - 9)} durationInFrames={span(20)} name={`Marker wipe ${k + 1}`}>
         <MarkerWipe color={k === 1 ? COLORS.title : COLORS.orange} reverse={k === 1} />
       </Sequence>
     ))}

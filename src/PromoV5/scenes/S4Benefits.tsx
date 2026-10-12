@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
 import { useStoryFrame } from "../lib/time";
-import { BENEFIT_LEN, COLORS, toOut } from "../timeline";
+import { BENEFIT_LEN, COLORS, span } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, easeInOut, easeOut, jitter, pendulum, pop, prog, rand, wobble } from "../lib/anim";
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
@@ -112,7 +112,7 @@ const BenefitCanada: React.FC = () => {
       {new Array(7).fill(0).map((_, k) => (
         <FallingLeaf key={k} frame={frame} seed={k + 1} />
       ))}
-      <Headline frame={frame} text={"معلم‌هایی آشنا با\nبرنامه درسی مدارس کانادا"} accent={["کانادا"]} underline={["کانادا"]} size={84} />
+      <Headline frame={frame} text={"معلم‌های آشنا به\nبرنامه درسی مدارس کانادا"} accent={["کانادا"]} underline={["کانادا"]} size={84} />
       <div style={{ position: "absolute", left: 160, top: 620, transform: "scale(1.18)", transformOrigin: "50% 0%" }}>
         <SchoolBuilding frame={frame} />
       </div>
@@ -124,8 +124,11 @@ const BenefitCanada: React.FC = () => {
         <Card radius={30} pad={12} style={{ width: 500, position: "relative" }}>
           <div style={{ width: 476, height: 308, borderRadius: 22, overflow: "hidden" }}>
             <div style={{ width: "100%", height: "100%", transform: `scale(${1.02 + frame * 0.001})` }}>
-              <PhotoFill name="tutor-bio-wide" position="50% 40%" />
+              <PhotoFill name="tara-rasti" position="50% 38%" />
             </div>
+          </div>
+          <div style={{ position: "absolute", right: 16, bottom: 14, background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: "4px 14px", fontFamily: FA, fontWeight: 800, fontSize: 24, color: COLORS.title, direction: "rtl" }}>
+            تارا راستی
           </div>
           <div style={{ position: "absolute", left: 28, top: 26, display: "flex", alignItems: "center", gap: 8, background: "#fff", borderRadius: 20, padding: "4px 14px", fontFamily: FA, fontWeight: 800, fontSize: 24, color: COLORS.red }}>
             <div style={{ width: 10, height: 10, borderRadius: 5, background: COLORS.red, opacity: frame % 30 < 18 ? 1 : 0.3 }} />
@@ -165,7 +168,7 @@ const ProgressRing: React.FC<{ frame: number }> = ({ frame }) => {
         <div style={{ fontFamily: FA, fontWeight: 900, fontSize: 110, color: COLORS.title, lineHeight: 1 }}>
           {`٪${"۰۱۲۳۴۵۶۷۸۹".split("").reduce((acc, d, i) => acc.replace(new RegExp(String(i), "g"), d), String(v))}`}
         </div>
-        <div style={{ fontFamily: FA, fontWeight: 700, fontSize: 34, color: COLORS.secondary, direction: "rtl" }}>پیشرفت رایان</div>
+        <div style={{ fontFamily: FA, fontWeight: 700, fontSize: 34, color: COLORS.secondary, direction: "rtl" }}>پیشرفت سارا</div>
       </div>
     </div>
   );
@@ -344,11 +347,8 @@ const BenefitPrice: React.FC = () => {
       <div style={{ position: "absolute", left: 40, top: 760 }}>
         <BalanceScale frame={frame} />
       </div>
-      <div style={{ position: "absolute", left: 540, top: 1500, transform: `translateY(${(1 - pop(frame, 6, 160, 14)) * 400}px)` }}>
+      <div style={{ position: "absolute", left: 300, top: 1500, transform: `translateY(${(1 - pop(frame, 6, 160, 14)) * 400}px)` }}>
         <Cutout name="kid-laptop" height={420} frame={frame} seed={6} />
-      </div>
-      <div style={{ position: "absolute", left: 30, top: 1490, transform: `translateY(${(1 - pop(frame, 10, 160, 14)) * 400}px)` }}>
-        <Cutout name="kid-desk" height={430} frame={frame} seed={7} flip />
       </div>
       <div style={{ position: "absolute", left: 830, top: 1360, transform: `scale(${heart}) rotate(${wobble(frame - 34, 14)}deg)` }}>
         <HeartIcon size={120} />
@@ -369,13 +369,13 @@ const BenefitPrice: React.FC = () => {
 
 export const S4Benefits: React.FC = () => (
   <AbsoluteFill>
-    <Sequence durationInFrames={toOut(BENEFIT_LEN)} name="Canada curriculum">
+    <Sequence durationInFrames={span(BENEFIT_LEN)} name="Canada curriculum">
       <BenefitCanada />
     </Sequence>
-    <Sequence from={toOut(BENEFIT_LEN)} durationInFrames={toOut(2 * BENEFIT_LEN) - toOut(BENEFIT_LEN)} name="Personalised">
+    <Sequence from={span(BENEFIT_LEN)} durationInFrames={span(2 * BENEFIT_LEN) - span(BENEFIT_LEN)} name="Personalised">
       <BenefitPersonal />
     </Sequence>
-    <Sequence from={toOut(BENEFIT_LEN * 2)} durationInFrames={toOut(3 * BENEFIT_LEN) - toOut(2 * BENEFIT_LEN)} name="Price">
+    <Sequence from={span(BENEFIT_LEN * 2)} durationInFrames={span(3 * BENEFIT_LEN) - span(2 * BENEFIT_LEN)} name="Price">
       <BenefitPrice />
     </Sequence>
   </AbsoluteFill>

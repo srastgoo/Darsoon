@@ -1,6 +1,6 @@
 import React from "react";
 import { Audio, Sequence, interpolate, staticFile } from "remotion";
-import { BENEFIT_LEN, MOTION_FRAMES, SCENES, STAT_INTRO, STAT_LEN, SUBJECT_LEN, toOut } from "./timeline";
+import { BENEFIT_LEN, MOTION_FRAMES, MUSIC_TRIM, SCENES, STAT_INTRO, STAT_LEN, SUBJECT_LEN, toOut } from "./timeline";
 import { CTA_LOGO, CTA_TAP } from "./scenes/S6CTA";
 
 type Sfx = "marker" | "click" | "pop" | "whoosh" | "swipe" | "impact" | "ding" | "coin" | "tick" | "thud" | "boing" | "success";
@@ -112,6 +112,7 @@ export const Soundtrack: React.FC = () => (
   <>
     <Audio
       src={staticFile("v5/music.mp3")}
+      trimBefore={MUSIC_TRIM}
       volume={(f) => interpolate(f, [0, 6, MOTION_FRAMES - 24, MOTION_FRAMES], [0, 0.5, 0.5, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}
     />
     {CUES.map((c, i) => (
