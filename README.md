@@ -71,4 +71,5 @@ bundled Vazirmatn. All fonts load locally, so renders need no network.
 ```console
 npx remotion render DarsoonLaunch out/DarsoonLaunch.mp4 --crf=18   # hook clip + motion film (~43s)
 npx remotion render DarsoonMotion out/DarsoonMotion.mp4 --crf=18   # motion film only (~35s)
+npx remotion render DarsoonChemistry out/DarsoonChemistry.mp4 --crf=18   # 10s chemistry spot
 ```

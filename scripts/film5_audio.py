@@ -259,6 +259,46 @@ def build_music():
 # --------------------------------------------------------------------------- sfx
 
 
+def build_chem_music():
+    """10 s, 120 BPM, straight into the groove: 5 bars = the chemistry spot's 5 beats."""
+    bpm = 120
+    beat = 60 / bpm
+    bar_len = beat * 4
+    bars = [Bm, G, D, A, D]
+    n = int((len(bars) * bar_len + 0.6) * SR)
+    drums, music, bassbus, sidechain = np.zeros(n), np.zeros(n), np.zeros(n), np.ones(n)
+    for b, (root, tones) in enumerate(bars):
+        t0 = b * bar_len
+        last = b == len(bars) - 1
+        place(music, pad([midi_hz(m) for m in tones[:4]], bar_len + 0.4), t0, 0.3)
+        pattern = [0, 2, 1, 3, 4, 2, 3, 1]
+        for k in range(16):
+            m = tones[pattern[k % 8]] + (12 if k % 8 == 4 else 0)
+            place(music, pluck(midi_hz(m), 0.3, bright=11), t0 + k * beat / 4, 0.15 if k % 4 == 0 else 0.11)
+        for q in range(4):
+            tb = t0 + q * beat
+            place(drums, kick(), tb, 0.95)
+            i = int(tb * SR)
+            env = 1 - 0.55 * np.exp(-np.arange(min(int(0.22 * SR), n - i)) / SR * 14)
+            sidechain[i : i + len(env)] = np.minimum(sidechain[i : i + len(env)], env)
+            if q in (1, 3):
+                place(drums, clap(), tb, 0.8)
+            place(drums, hat(open_=True), tb + beat / 2, 0.45)
+            place(drums, hat(), tb + beat / 4, 0.3)
+            place(drums, hat(), tb + 3 * beat / 4, 0.3)
+        for off, length in [(0, 0.4), (0.75, 0.2), (1.5, 0.35), (2.5, 0.4), (3.25, 0.2), (3.5, 0.4)]:
+            place(bassbus, bass(midi_hz(root), length * beat * 1.6), t0 + off * beat, 0.42)
+        if last:
+            for i, m in enumerate([74, 78, 81, 86]):
+                place(music, bell(midi_hz(m), 1.4), t0 + i * beat / 4, 0.16)
+    music = reverb(music, 2.0, 0.3)
+    mix = (music + bassbus) * sidechain + drums * 0.9
+    tt = np.arange(n) / SR
+    mix *= np.clip(tt / 0.02, 0, 1) * np.clip((len(bars) * bar_len - tt) / 0.6, 0, 1)
+    mix = np.tanh(mix * 1.25)
+    return mix / (np.max(np.abs(mix)) + 1e-9) * 0.89
+
+
 def sfx_marker(dur=0.55):
     t = t_axis(dur)
     noise = fft_filter(rng.standard_normal(len(t)), lo=1500, hi=9000)
@@ -368,6 +408,18 @@ def sfx_crumple():
     return out * 0.6
 
 
+def sfx_bubbles():
+    """A cluster of rising 'bloop' bubbles for the chemistry spot."""
+    out = np.zeros(int(0.7 * SR))
+    for k in range(9):
+        t = t_axis(0.09)
+        f0 = rng.uniform(500, 1100)
+        f = f0 * (1 + 1.6 * t / 0.09)
+        b = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 38) * np.minimum(t / 0.004, 1)
+        place(out, b, rng.uniform(0, 0.55), rng.uniform(0.25, 0.6))
+    return out
+
+
 SFX = {
     "marker": sfx_marker,
     "click": sfx_click,
@@ -383,6 +435,7 @@ SFX = {
     "success": sfx_success,
     "scratch": sfx_scratch,
     "crumple": sfx_crumple,
+    "bubbles": sfx_bubbles,
 }
 
 
@@ -417,3 +470,5 @@ if __name__ == "__main__":
     rng = np.random.default_rng(11)
     for name, fn in SFX.items():
         write_mp3(f"sfx-{name}.mp3", fn())
+    rng = np.random.default_rng(21)
+    write_mp3("chem-music.mp3", build_chem_music(), stereo_width=0.35)
