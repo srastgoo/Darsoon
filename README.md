@@ -72,4 +72,6 @@ bundled Vazirmatn. All fonts load locally, so renders need no network.
 npx remotion render DarsoonLaunch out/DarsoonLaunch.mp4 --crf=18   # hook clip + motion film (~42s)
 npx remotion render DarsoonMotion out/DarsoonMotion.mp4 --crf=18   # motion film only (~34s)
 npx remotion render DarsoonChemistry out/DarsoonChemistry.mp4 --crf=18   # 10s chemistry spot
+npx remotion still DarsoonPosterFeed renders/DarsoonPoster-Feed.png     # Meta Ads poster 1080x1350
+npx remotion still DarsoonPosterStory renders/DarsoonPoster-Story.png   # Meta Ads stories 1080x1920
 ```

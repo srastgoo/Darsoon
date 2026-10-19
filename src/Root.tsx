@@ -1,5 +1,5 @@
 import "./index.css";
-import { Composition } from "remotion";
+import { Composition, Still } from "remotion";
 import { DarsoonPromo } from "./Promo/DarsoonPromo";
 import { TOTAL_DURATION_IN_FRAMES, FPS } from "./Promo/theme";
 import { DarsoonTutorAd } from "./PromoV2/DarsoonTutorAd";
@@ -10,6 +10,7 @@ import { DarsoonFilm } from "./PromoV4/DarsoonFilm";
 import { TOTAL_DURATION_V4 } from "./PromoV4/durations";
 import { DarsoonLaunch, DarsoonMotion } from "./PromoV5/DarsoonLaunch";
 import { CHEM_FRAMES, ChemistryIntro } from "./PromoV5/chem/ChemistryIntro";
+import { MetaPosterFeed, MetaPosterStory } from "./PromoV5/poster/MetaPoster";
 import { FPS as FPS_V5, HEIGHT as HEIGHT_V5, FILM_FRAMES as FILM_FRAMES_V5, MOTION_FRAMES as MOTION_FRAMES_V5, WIDTH as WIDTH_V5 } from "./PromoV5/timeline";
 
 export const RemotionRoot: React.FC = () => {
@@ -71,6 +72,9 @@ export const RemotionRoot: React.FC = () => {
         width={WIDTH_V5}
         height={HEIGHT_V5}
       />
+      {/* Meta Ads posters: 4:5 feed and 9:16 stories/reels */}
+      <Still id="DarsoonPosterFeed" component={MetaPosterFeed} width={1080} height={1350} />
+      <Still id="DarsoonPosterStory" component={MetaPosterStory} width={1080} height={1920} />
     </>
   );
 };
