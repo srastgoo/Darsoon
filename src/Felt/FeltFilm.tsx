@@ -150,10 +150,10 @@ export const FeltFilm: React.FC = () => {
       <ClothWipe f={f - (S.phone[1] - 9)} color={FELT.orange} dir={1} />
       <ClothWipe f={f - (S.online[1] - 9)} color={FELT.teal} dir={-1} />
 
-      <Audio src={staticFile("v5/felt-music.mp3")} volume={(fr) => (fr < FELT_FRAMES - 30 ? 0.55 : 0.55 * Math.max(0, (FELT_FRAMES - fr) / 30))} />
+      <Audio src={staticFile("v5/felt-music.mp3")} volume={(fr) => (fr < FELT_FRAMES - 30 ? 0.75 : 0.75 * Math.max(0, (FELT_FRAMES - fr) / 30))} />
       {CUES.map((c, i) => (
         <Sequence key={i} from={c.at} durationInFrames={90} name={`sfx ${c.sfx}`}>
-          <Audio src={staticFile(`v5/sfx-${c.sfx}.mp3`)} volume={() => c.vol * 0.6} />
+          <Audio src={staticFile(`v5/sfx-${c.sfx}.mp3`)} volume={() => c.vol * 0.8} />
         </Sequence>
       ))}
     </AbsoluteFill>
