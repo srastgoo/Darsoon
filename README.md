@@ -75,3 +75,17 @@ npx remotion render DarsoonChemistry out/DarsoonChemistry.mp4 --crf=18   # 10s c
 npx remotion still DarsoonPosterFeed renders/DarsoonPoster-Feed.png     # Meta Ads poster 1080x1350
 npx remotion still DarsoonPosterStory renders/DarsoonPoster-Story.png   # Meta Ads stories 1080x1920
 ```
+
+## DarsoonFeltFrench — 44s felt stop-motion ad (`src/Felt`)
+
+A silent (music-only) story in needle-felt style for Meta Ads, 1080×1920:
+an Iranian family packs up in Tehran, flies across a knitted globe to
+Toronto, the daughter struggles in French immersion, sees Darsoon's online
+French class on a phone, then learns happily with her tutor on a laptop.
+The felt look is pure SVG filters (`src/Felt/kit.tsx`); the family rig is
+in `src/Felt/characters.tsx`; animation runs "on twos" for a stop-motion
+feel. Music/SFX come from `scripts/film5_audio.py` (`felt-music.mp3`).
+
+```console
+npx remotion render DarsoonFeltFrench out/DarsoonFeltFrench.mp4 --crf=18
+```

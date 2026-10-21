@@ -299,6 +299,113 @@ def build_chem_music():
     return mix / (np.max(np.abs(mix)) + 1e-9) * 0.89
 
 
+def build_felt_music():
+    """Felt immigration story, 90 BPM, 16.5 bars (44 s).
+    Bars 0-9: tender and a little homesick (soft plucks, pad, music-box bells, no drums).
+    Bar 10 (the phone moment, frame 800): lifts into a warm, hopeful groove.
+    Bar 15: bells on the logo; ring-out to the end."""
+    bpm = 90
+    beat = 60 / bpm
+    bar_len = beat * 4
+    Am = (45, [57, 60, 64, 67, 72])
+    F = (41, [57, 60, 65, 69, 72])
+    C = (48, [55, 60, 64, 67, 72])
+    Gs = (43, [55, 59, 62, 67, 71])
+    Em = (40, [55, 59, 64, 67, 71])
+    sad = [Am, F, C, Gs, Am, F, C, Em, F, Gs]
+    happy = [C, Gs, Am, F, C, Gs, F]
+    bars = sad + happy
+    total_bars = 16.5
+    n = int((total_bars * bar_len + 1.0) * SR)
+    drums, music, bassbus, sidechain = np.zeros(n), np.zeros(n), np.zeros(n), np.ones(n)
+    for b, (root, tones) in enumerate(bars):
+        t0 = b * bar_len
+        lift = b >= len(sad)
+        place(music, pad([midi_hz(m) for m in tones[:4]], bar_len + 0.6, attack=0.6, release=0.8), t0, 0.26 if lift else 0.22)
+        if not lift:
+            # gentle broken chords + a music-box melody note per beat
+            for k in range(8):
+                m = tones[[0, 2, 1, 3, 2, 4, 3, 1][k]]
+                place(music, pluck(midi_hz(m), 0.6, bright=5), t0 + k * beat / 2, 0.13)
+            for q, m in enumerate([tones[4], tones[3], tones[2], tones[3]]):
+                if (b + q) % 2 == 0:
+                    place(music, bell(midi_hz(m + 12), 1.4), t0 + q * beat, 0.07)
+            place(bassbus, bass(midi_hz(root), bar_len * 0.9) * 0.6, t0, 0.3)
+            continue
+        for k in range(16):
+            m = tones[[0, 2, 1, 3, 4, 2, 3, 1][k % 8]] + (12 if k % 8 == 4 else 0)
+            place(music, pluck(midi_hz(m), 0.35, bright=10), t0 + k * beat / 4, 0.14 if k % 4 == 0 else 0.1)
+        for q in range(4):
+            tb = t0 + q * beat
+            place(drums, kick(), tb, 0.85)
+            i = int(tb * SR)
+            env = 1 - 0.5 * np.exp(-np.arange(min(int(0.22 * SR), n - i)) / SR * 14)
+            sidechain[i : i + len(env)] = np.minimum(sidechain[i : i + len(env)], env)
+            if q in (1, 3):
+                place(drums, clap(), tb, 0.7)
+            place(drums, hat(open_=True), tb + beat / 2, 0.35)
+            place(drums, hat(), tb + beat / 4, 0.22)
+            place(drums, hat(), tb + 3 * beat / 4, 0.22)
+        for off, length in [(0, 0.5), (1.5, 0.4), (2, 0.5), (3, 0.4), (3.5, 0.4)]:
+            place(bassbus, bass(midi_hz(root), length * beat * 1.6), t0 + off * beat, 0.4)
+    # riser into the lift, bells on the logo bar
+    rdur = bar_len * 0.9
+    t = t_axis(rdur)
+    noise = rng.standard_normal(len(t))
+    riser = np.zeros_like(t)
+    for c in range(24):
+        a, b2 = c * len(t) // 24, (c + 1) * len(t) // 24
+        lo = 400 + 4500 * (c / 24) ** 2
+        riser[a:b2] = fft_filter(noise[a:b2], lo=lo, hi=lo * 2.2)
+    place(music, riser * (t / rdur) ** 2 * 0.4, len(sad) * bar_len - rdur, 1.0)
+    for i, m in enumerate([72, 76, 79, 84]):
+        place(music, bell(midi_hz(m), 1.8), 15 * bar_len + i * beat / 4, 0.15)
+    music = reverb(music, 2.6, 0.35)
+    mix = (music + bassbus) * sidechain + drums * 0.85
+    tt = np.arange(n) / SR
+    mix *= np.clip(tt / 0.3, 0, 1) * np.clip((total_bars * bar_len - tt) / 1.4, 0, 1)
+    mix = np.tanh(mix * 1.2)
+    return mix / (np.max(np.abs(mix)) + 1e-9) * 0.89
+
+
+def sfx_zipper():
+    """Zip being pulled: a train of tiny clicks speeding up, on filtered noise."""
+    out = np.zeros(int(0.75 * SR))
+    tt = 0.0
+    k = 0
+    while tt < 0.68:
+        place(out, fft_filter(rng.standard_normal(int(0.006 * SR)), lo=2500) * 0.9, tt, 0.5 + 0.3 * rng.random())
+        tt += 0.03 * np.exp(-k / 18) + 0.008
+        k += 1
+    return out * 0.7
+
+
+def sfx_plane():
+    """Jet takeoff: rumble + rising whine, swelling then fading."""
+    t = t_axis(2.6)
+    rumble = fft_filter(rng.standard_normal(len(t)), lo=40, hi=400)
+    f = 300 + 900 * (t / 2.6) ** 1.3
+    whine = np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.12
+    env = np.sin(np.pi * np.clip(t / 2.6, 0, 1)) ** 1.2
+    return (rumble * 0.8 + whine) * env * 0.8
+
+
+def sfx_buzz():
+    """Phone vibrating on a table: two pulses."""
+    t = t_axis(0.9)
+    tone = np.sign(np.sin(2 * np.pi * 155 * t)) * 0.5 + np.sin(2 * np.pi * 310 * t) * 0.3
+    gate = ((t % 0.45) < 0.3).astype(float)
+    return fft_filter(tone * gate, hi=2500) * 0.6
+
+
+def sfx_bell():
+    """School bell ringing."""
+    t = t_axis(1.1)
+    ring = sum(a * np.sin(2 * np.pi * 1180 * r * t) for r, a in [(1, 1.0), (2.7, 0.5), (5.1, 0.25)])
+    trem = 0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 22 * t))
+    return ring * trem * np.exp(-t * 2.2) * 0.25
+
+
 def sfx_marker(dur=0.55):
     t = t_axis(dur)
     noise = fft_filter(rng.standard_normal(len(t)), lo=1500, hi=9000)
@@ -438,6 +545,8 @@ SFX = {
     "bubbles": sfx_bubbles,
 }
 
+FELT_SFX = {"zipper": sfx_zipper, "plane": sfx_plane, "buzz": sfx_buzz, "bell": sfx_bell}
+
 
 def write_mp3(name, sig, stereo_width=0.0):
     sig = np.asarray(sig, dtype=np.float64)
@@ -472,3 +581,7 @@ if __name__ == "__main__":
         write_mp3(f"sfx-{name}.mp3", fn())
     rng = np.random.default_rng(21)
     write_mp3("chem-music.mp3", build_chem_music(), stereo_width=0.35)
+    rng = np.random.default_rng(31)
+    write_mp3("felt-music.mp3", build_felt_music(), stereo_width=0.35)
+    for name, fn in FELT_SFX.items():
+        write_mp3(f"sfx-{name}.mp3", fn())

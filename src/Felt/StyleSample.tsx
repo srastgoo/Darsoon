@@ -38,7 +38,7 @@ export const FeltLabel: React.FC<{ children: React.ReactNode; color?: string; te
   </div>
 );
 
-const TehranWindow: React.FC = () => (
+export const TehranWindow: React.FC = () => (
   <svg width={560} height={560} viewBox="0 0 560 560" style={{ overflow: "visible" }}>
     <Felt shadow>
       <rect x={0} y={0} width={560} height={560} rx={28} fill={FELT.wood} />
@@ -68,7 +68,7 @@ const TehranWindow: React.FC = () => (
   </svg>
 );
 
-const Suitcase: React.FC<{ color: string; w: number; h: number; open?: boolean }> = ({ color, w, h }) => (
+export const Suitcase: React.FC<{ color: string; w: number; h: number; open?: boolean }> = ({ color, w, h }) => (
   <svg width={w} height={h * 1.25} viewBox={`0 0 ${w} ${h * 1.25}`} style={{ overflow: "visible" }}>
     <Felt shadow>
       <rect x={w * 0.32} y={0} width={w * 0.36} height={h * 0.3} rx={14} fill="none" stroke="#3b302b" strokeWidth={14} />
@@ -100,19 +100,19 @@ export const FeltStyleSample: React.FC<{ variant: "home" | "sparkle" }> = ({ var
           </Felt>
           <Stitch d="M110 80 L970 80 L1025 340 L55 340 Z" color="rgba(255,235,210,0.7)" />
         </svg>
-        <div style={{ position: "absolute", left: 60, top: 1060 }}>
-          <FeltPerson who="dad" size={300} mood="happy" armR={30} />
+        <div style={{ position: "absolute", left: 10, top: 1000 }}>
+          <FeltPerson who="dad" size={270} mood="happy" />
         </div>
-        <div style={{ position: "absolute", left: 310, top: 1080 }}>
-          <FeltPerson who="mom" size={290} mood="worried" armL={20} />
+        <div style={{ position: "absolute", left: 270, top: 1030 }}>
+          <FeltPerson who="mom" size={255} mood="happy" />
         </div>
-        <div style={{ position: "absolute", left: 560, top: 1250 }}>
-          <FeltPerson who="girl" size={230} mood="sad" />
+        <div style={{ position: "absolute", left: 525, top: 1130 }}>
+          <FeltPerson who="girl" size={225} mood="happy" />
         </div>
-        <div style={{ position: "absolute", left: 790, top: 1330 }}>
-          <FeltPerson who="boy" size={190} mood="laugh" armL={150} armR={150} />
+        <div style={{ position: "absolute", left: 765, top: 1210 }}>
+          <FeltPerson who="boy" size={200} mood="laugh" />
         </div>
-        <div style={{ position: "absolute", left: 640, top: 1560 }}>
+        <div style={{ position: "absolute", left: 800, top: 1640 }}>
           <Suitcase color={FELT.mustard} w={300} h={220} />
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 820, display: "flex", justifyContent: "center" }}>
@@ -121,8 +121,8 @@ export const FeltStyleSample: React.FC<{ variant: "home" | "sparkle" }> = ({ var
       </>
     ) : (
       <>
-        <div style={{ position: "absolute", left: 240, top: 620 }}>
-          <FeltPerson who="girl" size={600} mood="amazed" sparkle={1} blush={1} armL={110} />
+        <div style={{ position: "absolute", left: 250, top: 560 }}>
+          <FeltPerson who="girl" size={520} mood="amazed" sparkle={1} blush={1} armL={60} />
         </div>
         {/* felt phone with the Darsoon ad */}
         <div style={{ position: "absolute", left: 560, top: 1150, transform: "rotate(-8deg)" }}>

@@ -11,6 +11,7 @@ import { TOTAL_DURATION_V4 } from "./PromoV4/durations";
 import { DarsoonLaunch, DarsoonMotion } from "./PromoV5/DarsoonLaunch";
 import { CHEM_FRAMES, ChemistryIntro } from "./PromoV5/chem/ChemistryIntro";
 import { MetaPosterFeed, MetaPosterStory } from "./PromoV5/poster/MetaPoster";
+import { FELT_FPS, FELT_FRAMES, FeltFilm } from "./Felt/FeltFilm";
 import { FPS as FPS_V5, HEIGHT as HEIGHT_V5, FILM_FRAMES as FILM_FRAMES_V5, MOTION_FRAMES as MOTION_FRAMES_V5, WIDTH as WIDTH_V5 } from "./PromoV5/timeline";
 
 export const RemotionRoot: React.FC = () => {
@@ -75,6 +76,8 @@ export const RemotionRoot: React.FC = () => {
       {/* Meta Ads posters: 4:5 feed and 9:16 stories/reels */}
       <Still id="DarsoonPosterFeed" component={MetaPosterFeed} width={1080} height={1350} />
       <Still id="DarsoonPosterStory" component={MetaPosterStory} width={1080} height={1920} />
+      {/* 44 s felt stop-motion story: immigrant family → French immersion → Darsoon French class */}
+      <Composition id="DarsoonFeltFrench" component={FeltFilm} durationInFrames={FELT_FRAMES} fps={FELT_FPS} width={1080} height={1920} />
     </>
   );
 };
