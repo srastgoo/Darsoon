@@ -8,6 +8,7 @@ import { Burst, Marker } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Cutout, PhotoFill } from "../art/Photo";
 import { SaraStudying } from "../art/Studying";
+import { BLEED, useBleedKeepChildren, useFeed } from "../lib/format";
 
 type Subject = { name: string; color: string; bg: string; Visual: React.FC<{ f: number }>; origin: [number, number] };
 
@@ -22,13 +23,13 @@ const MathVisual: React.FC<{ f: number }> = ({ f }) => {
   const compass = prog(f, 6, 20, easeInOut);
   return (
     <>
-      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, overflow: "visible" }}>
         <defs>
           <pattern id="v5gp" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M40 0H0V40" fill="none" stroke="rgba(237,95,0,0.12)" strokeWidth="2" />
           </pattern>
         </defs>
-        <rect width={1080} height={1920} fill="url(#v5gp)" />
+        <rect x={-BLEED} y={-BLEED} width={1080 + BLEED * 2} height={1920 + BLEED * 2} fill="url(#v5gp)" />
         <Marker d="M100 1300 H980 M540 1420 V700" p={prog(f, 0, 8)} color={COLORS.title} width={6} rough={false} />
         <Marker d="M200 880 Q540 1720 880 880" p={draw} color={COLORS.orange} width={12} />
         <circle cx={540} cy={1060} r={250} fill="none" stroke={COLORS.blue} strokeWidth={6} strokeDasharray={`${compass * 1571} 1571`} transform="rotate(-90 540 1060)" opacity={0.5} />
@@ -470,6 +471,8 @@ const lenOf = (i: number) => (i === SUBJECTS.length - 1 ? SUBJECT_LAST_LEN : SUB
 
 export const S5Subjects: React.FC = () => {
   const frame = useStoryFrame();
+  const bleed = useBleedKeepChildren();
+  const shift = useFeed() ? BLEED : 0;
   return (
     <AbsoluteFill style={{ background: COLORS.canvas }}>
       {SUBJECTS.map((sub, i) => {
@@ -483,7 +486,7 @@ export const S5Subjects: React.FC = () => {
         const { Visual } = sub;
         const nameIn = pop(f, 2, 230, 11);
         return (
-          <AbsoluteFill key={sub.name} style={{ clipPath: `circle(${r}px at ${ox}px ${oy}px)`, background: sub.bg }}>
+          <AbsoluteFill key={sub.name} style={{ clipPath: `circle(${r}px at ${ox + shift}px ${oy + shift}px)`, background: sub.bg, ...bleed }}>
             <Visual f={f} />
             <div style={{ position: "absolute", top: 210, left: 0, right: 0, transform: `scale(${nameIn}) rotate(${(1 - nameIn) * -6}deg)` }}>
               <KineticText text={sub.name} frame={f} start={2} size={sub.name.length > 8 ? 130 : sub.name.length > 6 ? 150 : 190} color={sub.color} />

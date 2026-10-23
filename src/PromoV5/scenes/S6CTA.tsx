@@ -9,6 +9,7 @@ import { KineticText } from "../lib/KineticText";
 import { Avatar, Cutout, PhotoFill } from "../art/Photo";
 import { CheckBadge, StarIcon } from "../art/Icons";
 import { LogoFull, LogoIcon } from "../art/Brand";
+import { useBleed } from "../lib/format";
 
 export const CTA_TAP = 64;
 export const CTA_LOGO = 86;
@@ -111,6 +112,7 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
 
 export const S6CTA: React.FC = () => {
   const frame = useStoryFrame();
+  const bleed = useBleed();
 
   // zoom-through: start inside the phone screen, pull back to reveal it
   const pull = prog(frame, 0, 16, easeInOut);
@@ -147,7 +149,7 @@ export const S6CTA: React.FC = () => {
       </div>
 
       {/* dims the app scene for the final call to action */}
-      <AbsoluteFill style={{ background: `rgba(252,249,247,${0.98 * dim})` }} />
+      <AbsoluteFill style={{ background: `rgba(252,249,247,${0.98 * dim})`, ...bleed }} />
 
       {/* the round ن mark lands above the button */}
       {logoOn ? (

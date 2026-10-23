@@ -8,7 +8,7 @@ import { DarsoonCommercial } from "./PromoV3/DarsoonCommercial";
 import { TOTAL_DURATION_V3 } from "./PromoV3/durations";
 import { DarsoonFilm } from "./PromoV4/DarsoonFilm";
 import { TOTAL_DURATION_V4 } from "./PromoV4/durations";
-import { DarsoonLaunch, DarsoonMotion } from "./PromoV5/DarsoonLaunch";
+import { DarsoonLaunch, DarsoonLaunchFeed, DarsoonMotion } from "./PromoV5/DarsoonLaunch";
 import { CHEM_FRAMES, ChemistryIntro } from "./PromoV5/chem/ChemistryIntro";
 import { MetaPosterFeed, MetaPosterStory } from "./PromoV5/poster/MetaPoster";
 import { FELT_FPS, FELT_FRAMES, FeltFilm } from "./Felt/FeltFilm";
@@ -56,6 +56,14 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS_V5}
         width={WIDTH_V5}
         height={HEIGHT_V5}
+      />
+      <Composition
+        id="DarsoonLaunchFeed"
+        component={DarsoonLaunchFeed}
+        durationInFrames={FILM_FRAMES_V5}
+        fps={FPS_V5}
+        width={WIDTH_V5}
+        height={1350}
       />
       <Composition
         id="DarsoonMotion"

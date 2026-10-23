@@ -2,16 +2,22 @@ import React from "react";
 import { AbsoluteFill } from "remotion";
 import { COLORS, HEIGHT, WIDTH } from "../timeline";
 import { clamp01, rand } from "./anim";
+import { BLEED, useBleed, useFeed } from "./format";
 
 /** Paper-light canvas with faint notebook grid, grain and soft vignette. */
 export const Paper: React.FC<{ grid?: boolean; tint?: string; drift?: number }> = ({
   grid = true,
   tint = COLORS.canvas,
   drift = 0,
-}) => (
-  <AbsoluteFill style={{ background: tint }}>
+}) => {
+  const bleed = useBleed();
+  const feed = useFeed();
+  const w = feed ? WIDTH + BLEED * 2 : WIDTH;
+  const h = feed ? HEIGHT + BLEED * 2 : HEIGHT;
+  return (
+  <AbsoluteFill style={{ background: tint, ...bleed }}>
     {grid ? (
-      <svg width={WIDTH} height={HEIGHT} style={{ position: "absolute", inset: 0 }}>
+      <svg width={w} height={h} style={{ position: "absolute", inset: 0 }}>
         <defs>
           <pattern id="v5grid" width="60" height="60" patternUnits="userSpaceOnUse" x={0} y={-drift % 60}>
             <path d="M60 0H0V60" fill="none" stroke={COLORS.paperLine} strokeWidth="1.4" />
@@ -20,7 +26,7 @@ export const Paper: React.FC<{ grid?: boolean; tint?: string; drift?: number }> 
         <rect width="100%" height="100%" fill="url(#v5grid)" opacity={0.75} />
       </svg>
     ) : null}
-    <svg width={WIDTH} height={HEIGHT} style={{ position: "absolute", inset: 0, mixBlendMode: "multiply" }}>
+    <svg width={w} height={h} style={{ position: "absolute", inset: 0, mixBlendMode: "multiply" }}>
       <filter id="v5grain">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4" />
         <feColorMatrix values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.32  0 0 0 0.08 0" />
@@ -33,7 +39,8 @@ export const Paper: React.FC<{ grid?: boolean; tint?: string; drift?: number }> 
       }}
     />
   </AbsoluteFill>
-);
+  );
+};
 
 /** Shared SVG filter giving strokes a slightly wobbly, hand-drawn edge. */
 export const RoughDefs: React.FC = () => (

@@ -3,14 +3,17 @@ import { AbsoluteFill, Audio, Img, OffthreadVideo, Sequence, staticFile, useCurr
 import { COLORS, HOOK_FREEZE, TOSS_LEN } from "../timeline";
 import { clamp01, easeIn, easeInOut, lerp, prog, wobble } from "../lib/anim";
 import { Paper } from "../lib/visual";
+import { useFeed } from "../lib/format";
 
 /** The client's talking-head clip, with a punch-in on her final smile. */
 export const HookClip: React.FC = () => {
   const frame = useCurrentFrame();
   const punch = prog(frame, HOOK_FREEZE - 16, 16, easeIn);
+  // feed crop shows story y 285..1635, so the story's 30% punch origin (y 576) sits at 21.6%
+  const origin = useFeed() ? "50% 21.6%" : "50% 30%";
   return (
     <AbsoluteFill style={{ background: "#000" }}>
-      <AbsoluteFill style={{ transform: `scale(${1 + punch * 0.18})`, transformOrigin: "50% 30%" }}>
+      <AbsoluteFill style={{ transform: `scale(${1 + punch * 0.18})`, transformOrigin: origin }}>
         <OffthreadVideo src={staticFile("tutor-hook-video.mp4")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       </AbsoluteFill>
     </AbsoluteFill>

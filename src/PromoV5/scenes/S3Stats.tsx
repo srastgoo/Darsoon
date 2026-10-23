@@ -1,4 +1,5 @@
 import React from "react";
+import { useFeed } from "../lib/format";
 import { AbsoluteFill, interpolate } from "remotion";
 import { useStoryFrame } from "../lib/time";
 import { COLORS, STAT_INTRO, STAT_LEN } from "../timeline";
@@ -163,12 +164,15 @@ const GrowthCard: React.FC<{ frame: number }> = ({ frame }) => {
 
 /** Stat 1 visual: the classroom multiplies into a wall of live sessions. */
 const SessionWall: React.FC<{ frame: number }> = ({ frame }) => {
+  const feed = useFeed();
   const zoom = prog(frame, 0, 26, easeInOut);
   const out = prog(frame, at(1) - 5, 8, easeIn);
   if (out >= 1) return null;
-  const cols = 9;
+  // the feed frame is wider than the story canvas: extend the wall sideways so it still runs off the edges
+  const cols = feed ? 13 : 9;
   const rows = 11;
   const cell = 110;
+  const extra = ((cols - 9) / 2) * (cell + 12);
   const scale = lerp(3.1, 1, zoom);
   return (
     <div
@@ -183,7 +187,7 @@ const SessionWall: React.FC<{ frame: number }> = ({ frame }) => {
       <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, ${cell}px)`, gap: 12 }}>
         {new Array(cols * rows).fill(0).map((_, k) => {
           const center = k === Math.floor((cols * rows) / 2);
-          const r = Math.hypot((k % cols) - 4, Math.floor(k / cols) - 5);
+          const r = Math.hypot((k % cols) - (cols - 1) / 2, Math.floor(k / cols) - (rows - 1) / 2);
           const appear = center ? 1 : prog(frame, 4 + r * 2.2, 8, easeOut);
           const tone = [COLORS.ctaBg, "#e7f0fb", "#e6f6f3", "#f1eafc"][k % 4];
           return (
@@ -210,7 +214,7 @@ const SessionWall: React.FC<{ frame: number }> = ({ frame }) => {
           <Classroom frame={60} still />
         </div>
       ) : null}
-      <div style={{ position: "absolute", right: -40, top: -60, transform: `scale(${pop(frame, at(0) + 6) / scale})`, transformOrigin: "100% 0%" }}>
+      <div style={{ position: "absolute", right: -40 + extra, top: -60, transform: `scale(${pop(frame, at(0) + 6) / scale})`, transformOrigin: "100% 0%" }}>
         <VideoIcon size={150} />
       </div>
     </div>
