@@ -1,4 +1,5 @@
 import React from "react";
+import { useFrameEdges } from "../lib/format";
 import { AbsoluteFill } from "remotion";
 import { useStoryFrame } from "../lib/time";
 import { COLORS } from "../timeline";
@@ -202,6 +203,7 @@ export const S1Problem: React.FC = () => {
 
   // dot of the question mark becomes the orange iris for the next scene
   const qx = 900;
+  const edges = useFrameEdges();
   const qGround = 1290;
   const dotScale = 1 + outro * 120;
 
@@ -226,7 +228,7 @@ export const S1Problem: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          left: -70,
+          left: -70 + edges.left, // keep the photo's cropped left edge off-frame in the wider feed frame
           top: 900 + (1 - studentIn) * 400,
           transform: `rotate(${shake * 0.12}deg)`,
           transformOrigin: "50% 100%",

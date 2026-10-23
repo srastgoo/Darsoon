@@ -8,12 +8,13 @@ import { Burst, Marker } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Cutout, PhotoFill } from "../art/Photo";
 import { SaraStudying } from "../art/Studying";
-import { BLEED, useBleedKeepChildren, useFeed } from "../lib/format";
+import { BLEED, useBleedKeepChildren, useFeed, useFrameEdges } from "../lib/format";
 
 type Subject = { name: string; color: string; bg: string; Visual: React.FC<{ f: number }>; origin: [number, number] };
 
 /* ---------------------------------------------------------------- Math */
 const MathVisual: React.FC<{ f: number }> = ({ f }) => {
+  const edges = useFrameEdges();
   const draw = prog(f, 2, 14, easeInOut);
   // ball rolls along y = x² (in graph units), released from the left rim
   const u = Math.cos((Math.max(0, f - 8) / 30) * Math.PI * 2.2) * Math.exp(-Math.max(0, f - 8) / 40) * -0.9;
@@ -44,7 +45,8 @@ const MathVisual: React.FC<{ f: number }> = ({ f }) => {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 30, top: 1290 + (1 - pop(f, 4, 170, 14)) * 500 }}>
+      {/* feed frame: tuck her into the bottom-left corner, clear of the subject chips */}
+      <div style={{ position: "absolute", left: edges.feed ? edges.left - 10 : 30, top: (edges.feed ? edges.bottom - 360 : 1290) + (1 - pop(f, 4, 170, 14)) * 500 }}>
         <SaraStudying height={400} frame={f} seed={8} />
       </div>
     </>
@@ -155,6 +157,7 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
 
 /* ---------------------------------------------------------------- Chemistry */
 const ChemVisual: React.FC<{ f: number }> = ({ f }) => {
+  const edges = useFrameEdges();
   const slosh = wobble(f, 22, 1.6, 2);
   const els = [
     { s: "H", n: 1, c: COLORS.blue },
@@ -215,8 +218,8 @@ const ChemVisual: React.FC<{ f: number }> = ({ f }) => {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 210, top: 1110 + (1 - pop(f, 3, 170, 14)) * 600 }}>
-        <Cutout name="kid-chem" height={600} frame={f} seed={9} />
+      <div style={{ position: "absolute", left: 210, top: (edges.feed ? 1180 : 1110) + (1 - pop(f, 3, 170, 14)) * 600 }}>
+        <Cutout name="kid-chem" height={600} frame={f} seed={9} fade={edges.feed ? { bottom: 0.18 } : undefined} />
       </div>
     </>
   );
@@ -394,6 +397,7 @@ const CODE_LINES: { t: string; c: string; indent?: number }[] = [
   { t: "hello(kid)", c: "#ffcb6b", indent: 1 },
 ];
 const CodingVisual: React.FC<{ f: number }> = ({ f }) => {
+  const edges = useFrameEdges();
   const win = pop(f, 0, 170, 14);
   // type the program out character by character
   const typed = Math.max(0, (f - 6) * 2.4);
@@ -450,7 +454,7 @@ const CodingVisual: React.FC<{ f: number }> = ({ f }) => {
         </g>
       </svg>
       <div style={{ position: "absolute", left: 80, top: 1260 + (1 - pop(f, 4, 170, 14)) * 600 }}>
-        <Cutout name="kid-laptop" height={430} frame={f} seed={12} />
+        <Cutout name="kid-laptop" height={430} frame={f} seed={12} fade={edges.feed ? { bottom: 0.2 } : undefined} />
       </div>
     </>
   );

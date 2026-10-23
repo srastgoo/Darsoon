@@ -29,13 +29,28 @@ export const useBleedKeepChildren = (): React.CSSProperties =>
     ? { left: -BLEED, right: -BLEED, top: -BLEED, bottom: -BLEED, width: "auto", height: "auto", border: `${BLEED}px solid transparent`, boxSizing: "border-box" }
     : {};
 
+const CamContext = createContext<{ s: number; y: number } | null>(null);
+
+/**
+ * Visible edges of the frame in story coordinates. On the story canvas this is
+ * 0..1080 × 0..1920; under a feed camera it is wider and shorter. Photos whose
+ * crop edge must stay off-screen are anchored to these.
+ */
+export const useFrameEdges = () => {
+  const cam = useContext(CamContext);
+  const feed = useFeed();
+  if (!feed || !cam) return { feed: false, left: 0, right: 1080, top: 0, bottom: 1920 };
+  const margin = (FEED_W / cam.s - 1080) / 2;
+  return { feed: true, left: -margin, right: 1080 + margin, top: cam.y, bottom: cam.y + FEED_H / cam.s };
+};
+
 /** Camera for one scene: show the story canvas at `s`, with story y `y` at the top of the feed frame. */
 export const Cam: React.FC<{ s: number; y: number; children: React.ReactNode }> = ({ s, y, children }) => {
   if (!useFeed()) return <>{children}</>;
   return (
     <AbsoluteFill style={{ overflow: "hidden" }}>
       <div style={{ position: "absolute", left: (FEED_W - 1080 * s) / 2, top: -y * s, width: 1080, height: 1920, transform: `scale(${s})`, transformOrigin: "0 0" }}>
-        {children}
+        <CamContext.Provider value={{ s, y }}>{children}</CamContext.Provider>
       </div>
     </AbsoluteFill>
   );

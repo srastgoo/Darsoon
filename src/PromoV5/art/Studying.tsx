@@ -33,7 +33,8 @@ export const SaraStudying: React.FC<{ height: number; frame: number; seed?: numb
         ))}
       </svg>
       <div style={{ position: "absolute", left: 0, top: 0 }}>
-        <Cutout name="kid-girl" height={height} frame={frame} seed={seed} />
+        {/* the source photo is cropped at her back and waist: fade those edges out */}
+        <Cutout name="kid-girl" height={height} frame={frame} seed={seed} fade={{ right: 0.2, bottom: 0.1 }} />
       </div>
     </div>
   );

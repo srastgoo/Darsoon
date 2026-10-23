@@ -33,6 +33,11 @@ export type PersonPhoto =
 
 export const photoSrc = (name: PersonPhoto) => staticFile(`v5/people/${name}.webp`);
 
+const fadeMask = ({ right = 0, bottom = 0 }: { right?: number; bottom?: number }): React.CSSProperties => {
+  const mask = `linear-gradient(to right, #000 ${(1 - right) * 100}%, transparent), linear-gradient(to bottom, #000 ${(1 - bottom) * 100}%, transparent)`;
+  return { maskImage: mask, WebkitMaskImage: mask, maskComposite: "intersect", WebkitMaskComposite: "source-in" };
+};
+
 /**
  * Real student cut out from the supplied photos (public/v5/people), with a thin
  * white sticker edge, soft contact shadow and a subtle breathing motion so a
@@ -45,8 +50,10 @@ export const Cutout: React.FC<{
   seed?: number;
   flip?: boolean;
   outline?: boolean;
+  /** Soften a photo crop edge that would otherwise show as a hard line (fraction of the image faded out). */
+  fade?: { right?: number; bottom?: number };
   style?: React.CSSProperties;
-}> = ({ name, height, frame, seed = 0, flip, outline = true, style }) => {
+}> = ({ name, height, frame, seed = 0, flip, outline = true, fade, style }) => {
   const breathe = 1 + Math.sin((frame + seed * 13) / 22) * 0.008;
   const sway = Math.sin((frame + seed * 7) / 31) * 0.6;
   const edge = outline
@@ -61,6 +68,7 @@ export const Cutout: React.FC<{
         transformOrigin: "50% 100%",
         transform: `${flip ? "scaleX(-1) " : ""}scale(${breathe}) rotate(${sway}deg)`,
         filter: `${edge}drop-shadow(0 24px 30px rgba(90,50,20,0.28))`,
+        ...(fade ? fadeMask(fade) : null),
         ...style,
       }}
     />
