@@ -27,7 +27,8 @@ export type PersonPhoto =
   | "mohsen-rahimi"
   | "tara-rasti"
   | "faryal-bagheri"
-  | "hamidreza-joshaghani";
+  | "hamidreza-joshaghani"
+  | "sahra-tabatabaei";
 
 export const photoSrc = (name: PersonPhoto) => staticFile(`v5/people/${name}.webp`);
 
