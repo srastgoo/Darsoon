@@ -53,7 +53,7 @@ const CUES: Cue[] = [
   { at: S + 140, sfx: "swipe", vol: 0.6 },
   // 3 · stats
   { at: T + 2, sfx: "whoosh", vol: 0.5 },
-  ...[0, 1, 2, 3, 4].flatMap((i): Cue[] => [
+  ...[0, 1, 2, 3, 4, 5, 6, 7].flatMap((i): Cue[] => [
     { at: stat(i), sfx: "whoosh", vol: 0.45 },
     { at: stat(i) + 9, sfx: "pop", vol: 0.85 },
     { at: stat(i) + 4, sfx: "tick", vol: 0.4 },
@@ -83,7 +83,7 @@ const CUES: Cue[] = [
   { at: B + BENEFIT_LEN * 2 + 22, sfx: "coin", vol: 0.5 },
   { at: B + BENEFIT_LEN * 2 + 34, sfx: "pop", vol: 0.8 },
   // 5 · subjects
-  ...[0, 1, 2, 3, 4].flatMap((i): Cue[] => [
+  ...[0, 1, 2, 3, 4, 5, 6, 7].flatMap((i): Cue[] => [
     { at: U + i * SUBJECT_LEN, sfx: "whoosh", vol: 0.55 },
     { at: U + i * SUBJECT_LEN + 4, sfx: "pop", vol: 0.75 },
   ]),
@@ -92,6 +92,9 @@ const CUES: Cue[] = [
   { at: U + SUBJECT_LEN * 3 + 8, sfx: "boing", vol: 0.35 },
   { at: U + SUBJECT_LEN * 4 + 6, sfx: "tick", vol: 0.8 },
   { at: U + SUBJECT_LEN * 4 + 18, sfx: "tick", vol: 0.8 },
+  { at: U + SUBJECT_LEN * 5 + 8, sfx: "ding", vol: 0.4 },
+  { at: U + SUBJECT_LEN * 6 + 8, sfx: "marker", vol: 0.5 },
+  ...[10, 14, 18, 22, 26, 30].map((f): Cue => ({ at: U + SUBJECT_LEN * 7 + f, sfx: "click", vol: 0.3 })),
   // 6 · CTA
   { at: C, sfx: "whoosh", vol: 0.8 },
   { at: C + 12, sfx: "click", vol: 0.4 },

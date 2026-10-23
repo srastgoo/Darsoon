@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill } from "remotion";
 import { useStoryFrame } from "../lib/time";
-import { COLORS, SUBJECT_INTRO, SUBJECT_LEN } from "../timeline";
+import { COLORS, SUBJECT_INTRO, SUBJECT_LAST_LEN, SUBJECT_LEN } from "../timeline";
 import { EN, FA } from "../fonts";
 import { bounce, clamp01, easeInOut, easeOut, lerp, pop, prog, rand, wobble } from "../lib/anim";
 import { Burst, Marker } from "../lib/visual";
@@ -267,13 +267,206 @@ const PhysicsVisual: React.FC<{ f: number }> = ({ f }) => {
   );
 };
 
+/* ---------------------------------------------------------------- Languages */
+/** Speech bubble that pops in at `at`, tail pointing down-left or down-right. */
+const Bubble: React.FC<{ f: number; at: number; x: number; y: number; text: string; color: string; size?: number; tail?: "left" | "right"; tilt?: number }> = ({
+  f,
+  at,
+  x,
+  y,
+  text,
+  color,
+  size = 110,
+  tail = "left",
+  tilt = -4,
+}) => {
+  const p = pop(f, at, 220, 11);
+  return (
+    <div style={{ position: "absolute", left: x, top: y + Math.sin((f + at * 7) / 9) * 8, transform: `scale(${p}) rotate(${tilt * p}deg)`, transformOrigin: tail === "left" ? "10% 100%" : "90% 100%" }}>
+      <div style={{ background: "#fff", border: `8px solid ${color}`, borderRadius: 60, padding: `${size * 0.16}px ${size * 0.42}px`, fontFamily: EN, fontWeight: 800, fontSize: size, color, whiteSpace: "nowrap", direction: "ltr", boxShadow: "0 22px 40px -18px rgba(0,0,0,0.3)" }}>
+        {text}
+      </div>
+      <svg width={90} height={70} viewBox="0 0 90 70" style={{ position: "absolute", top: "100%", marginTop: -8, [tail === "left" ? "left" : "right"]: 60 }}>
+        <path d={tail === "left" ? "M4 0 L70 0 L10 64 Z" : "M86 0 L20 0 L80 64 Z"} fill="#fff" stroke={color} strokeWidth={8} strokeLinejoin="round" />
+        <rect x={0} y={-8} width={90} height={10} fill="#fff" />
+      </svg>
+    </div>
+  );
+};
+
+const EnglishVisual: React.FC<{ f: number }> = ({ f }) => {
+  const blocks = [
+    { l: "A", c: COLORS.red },
+    { l: "B", c: COLORS.blue },
+    { l: "C", c: COLORS.yellow },
+  ];
+  const book = pop(f, 2, 170, 13);
+  return (
+    <>
+      {/* open book */}
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
+        <g transform={`translate(560 1180) scale(${book})`}>
+          <path d="M0 -150 C-110 -200 -250 -190 -340 -150 V190 C-250 150 -110 150 0 200 Z" fill="#fff" stroke={COLORS.title} strokeWidth={12} strokeLinejoin="round" />
+          <path d="M0 -150 C110 -200 250 -190 340 -150 V190 C250 150 110 150 0 200 Z" fill="#fff" stroke={COLORS.title} strokeWidth={12} strokeLinejoin="round" />
+          {[0, 1, 2, 3, 4].map((k) => (
+            <g key={k} opacity={prog(f, 8 + k * 2, 6)}>
+              <line x1={-290} y1={-100 + k * 55} x2={-60} y2={-90 + k * 55} stroke={k === 0 ? COLORS.red : "#d9d2cc"} strokeWidth={14} strokeLinecap="round" />
+              <line x1={60} y1={-90 + k * 55} x2={290 - (k % 2) * 60} y2={-100 + k * 55} stroke="#d9d2cc" strokeWidth={14} strokeLinecap="round" />
+            </g>
+          ))}
+        </g>
+      </svg>
+      <Bubble f={f} at={4} x={130} y={640} text="Hello!" color={COLORS.red} size={120} />
+      <Bubble f={f} at={9} x={560} y={830} text="How are you?" color={COLORS.blue} size={56} tail="right" tilt={4} />
+      {blocks.map((b, k) => {
+        const p = pop(f, 6 + k * 3, 200, 12);
+        return (
+          <div
+            key={b.l}
+            style={{
+              position: "absolute",
+              left: 300 + k * 170,
+              top: 1480 - (k === 1 ? 20 : 0) + (1 - p) * 300,
+              width: 150,
+              height: 150,
+              borderRadius: 22,
+              background: b.c,
+              boxShadow: "inset 0 -14px 0 rgba(0,0,0,0.18), 0 18px 30px -12px rgba(0,0,0,0.3)",
+              fontFamily: EN,
+              fontWeight: 800,
+              fontSize: 100,
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transform: `rotate(${(k - 1) * 6 + wobble(f - 6 - k * 3, 4)}deg)`,
+              opacity: clamp01(p * 2),
+            }}
+          >
+            {b.l}
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+const FRENCH = "#4a56c9";
+const FrenchVisual: React.FC<{ f: number }> = ({ f }) => {
+  const draw = prog(f, 1, 16, easeInOut);
+  return (
+    <>
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
+        {/* Eiffel tower, drawn on like a marker sketch */}
+        <g transform="translate(330 0)">
+          <Marker d="M0 640 V700 M-30 700 H30 M-24 700 L-70 1000 M24 700 L70 1000 M-100 1000 H100 M-70 1000 L-150 1300 M70 1000 L150 1300 M-185 1300 H185 M-150 1300 L-240 1640 M150 1300 L240 1640 M-100 1640 Q0 1460 100 1640" p={draw} color={COLORS.title} width={14} rough={false} />
+          <Marker d="M-50 860 L50 860 M-60 920 L60 920 M-115 1150 L115 1150 M-200 1480 L200 1480" p={prog(f, 10, 10)} color={FRENCH} width={10} rough={false} />
+        </g>
+        {/* tricolour pennants */}
+        {[0, 1, 2, 3, 4, 5].map((k) => {
+          const x = 600 + k * 75;
+          const y = 1360 + Math.sin(k * 0.9) * 18;
+          const c = [FRENCH, "#ffffff", COLORS.red][k % 3];
+          return <path key={k} d={`M${x} ${y} L${x + 70} ${y + 4} L${x + 35} ${y + 90 + wobble(f - 8 - k, 6)} Z`} fill={c} stroke="#d8d4e8" strokeWidth={3} opacity={prog(f, 8 + k, 5)} />;
+        })}
+        <path d="M590 1356 Q790 1400 1060 1366" fill="none" stroke={COLORS.secondary} strokeWidth={4} opacity={prog(f, 7, 5)} />
+        {/* croissant */}
+        <g transform={`translate(800 1600) scale(${pop(f, 12, 200, 12) * 1.5}) rotate(-12)`}>
+          {[-2, -1, 0, 1, 2].map((k) => (
+            <ellipse key={k} cx={k * 62} cy={Math.abs(k) * -22} rx={k === 0 ? 70 : 54 - Math.abs(k) * 8} ry={k === 0 ? 62 : 48 - Math.abs(k) * 8} fill={k === 0 ? "#e1a04a" : "#d58b34"} stroke="#9c5d1c" strokeWidth={6} />
+          ))}
+        </g>
+      </svg>
+      <Bubble f={f} at={4} x={480} y={640} text="Bonjour!" color={FRENCH} size={96} tail="left" tilt={4} />
+      <Bubble f={f} at={10} x={600} y={940} text="Merci ♥" color={COLORS.red} size={60} tail="left" tilt={-5} />
+    </>
+  );
+};
+
+/* ---------------------------------------------------------------- Programming */
+const CODE = "#3d4a6b";
+const CODE_LINES: { t: string; c: string; indent?: number }[] = [
+  { t: "def hello(name):", c: "#c792ea" },
+  { t: 'print("Hi " + name)', c: "#c3e88d", indent: 1 },
+  { t: "", c: "#fff" },
+  { t: "for kid in class_:", c: "#82aaff" },
+  { t: "hello(kid)", c: "#ffcb6b", indent: 1 },
+];
+const CodingVisual: React.FC<{ f: number }> = ({ f }) => {
+  const win = pop(f, 0, 170, 14);
+  // type the program out character by character
+  const typed = Math.max(0, (f - 6) * 2.4);
+  let budget = typed;
+  return (
+    <>
+      <div
+        style={{
+          position: "absolute",
+          left: 120,
+          top: 640,
+          width: 840,
+          height: 560,
+          borderRadius: 36,
+          background: "#1f2433",
+          boxShadow: "0 40px 70px -26px rgba(30,40,70,0.55)",
+          transform: `scale(${win}) rotate(${(1 - win) * -4}deg)`,
+          overflow: "hidden",
+          direction: "ltr",
+        }}
+      >
+        <div style={{ height: 70, background: "#2b3145", display: "flex", alignItems: "center", gap: 14, paddingLeft: 30 }}>
+          {[COLORS.red, COLORS.yellow, COLORS.green].map((c) => (
+            <div key={c} style={{ width: 24, height: 24, borderRadius: 12, background: c }} />
+          ))}
+          <div style={{ marginLeft: 20, fontFamily: EN, fontSize: 26, color: "#8a93ad" }}>darsoon.py</div>
+        </div>
+        <div style={{ padding: "34px 40px", fontFamily: '"DejaVu Sans Mono", monospace', fontSize: 40, lineHeight: 1.7 }}>
+          {CODE_LINES.map((l, k) => {
+            const shown = l.t.slice(0, Math.max(0, Math.min(l.t.length, Math.floor(budget))));
+            const typing = budget > 0 && budget < l.t.length + 1;
+            budget -= l.t.length + 2;
+            return (
+              <div key={k} style={{ color: l.c, paddingLeft: (l.indent ?? 0) * 60, height: 68, whiteSpace: "pre" }}>
+                <span style={{ color: "#5c6680", marginRight: 26, display: "inline-block", width: 30 }}>{k + 1}</span>
+                {shown}
+                {typing && f % 12 < 7 ? <span style={{ color: "#fff" }}>▍</span> : null}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      {/* </> badge */}
+      <div style={{ position: "absolute", left: 760, top: 520, width: 220, height: 220, borderRadius: 110, background: CODE, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${pop(f, 5, 220, 10)}) rotate(${wobble(f - 5, 8)}deg)`, boxShadow: "0 20px 40px -14px rgba(30,40,70,0.5)" }}>
+        <svg width={130} height={100} viewBox="0 0 130 100">
+          <path d="M38 18 L8 50 L38 82 M92 18 L122 50 L92 82 M74 10 L56 90" fill="none" stroke="#fff" strokeWidth={13} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      {/* gears of logic */}
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0 }}>
+        <g opacity={prog(f, 8, 6)}>
+          <Gear x={900} y={1330} r={70} rot={f * 7} color={COLORS.orange} />
+          <Gear x={985} y={1430} r={46} rot={-f * 10.6 + 8} color={CODE} />
+        </g>
+      </svg>
+      <div style={{ position: "absolute", left: 80, top: 1330 + (1 - pop(f, 4, 170, 14)) * 600 }}>
+        <Cutout name="kid-laptop" height={430} frame={f} seed={12} />
+      </div>
+    </>
+  );
+};
+
 export const SUBJECTS: Subject[] = [
   { name: "ریاضی", color: COLORS.orange, bg: "#fff1e6", Visual: MathVisual, origin: [890, 1420] },
   { name: "علوم", color: COLORS.teal, bg: "#e6f6f3", Visual: ScienceVisual, origin: [540, 1180] },
   { name: "بیولوژی", color: COLORS.green, bg: "#eaf6e8", Visual: BiologyVisual, origin: [560, 980] },
   { name: "شیمی", color: COLORS.purple, bg: "#f1eafc", Visual: ChemVisual, origin: [780, 1180] },
   { name: "فیزیک", color: COLORS.blue, bg: "#e7f0fb", Visual: PhysicsVisual, origin: [540, 1200] },
+  { name: "انگلیسی", color: COLORS.red, bg: "#fdeeee", Visual: EnglishVisual, origin: [540, 1620] },
+  { name: "فرانسه", color: FRENCH, bg: "#eceefb", Visual: FrenchVisual, origin: [300, 760] },
+  { name: "برنامه‌نویسی", color: CODE, bg: "#edf0f7", Visual: CodingVisual, origin: [700, 1050] },
 ];
+/** The last subject holds an extra beat so the section lands on the bar line before the CTA. */
+const lenOf = (i: number) => (i === SUBJECTS.length - 1 ? SUBJECT_LAST_LEN : SUBJECT_LEN);
 
 export const S5Subjects: React.FC = () => {
   const frame = useStoryFrame();
@@ -282,7 +475,7 @@ export const S5Subjects: React.FC = () => {
       {SUBJECTS.map((sub, i) => {
         const start = SUBJECT_INTRO + i * SUBJECT_LEN;
         const f = frame - start;
-        if (f < 0 || f > SUBJECT_LEN + 10) return null;
+        if (f < 0 || f > lenOf(i) + 10) return null;
         // ink-blot iris opening from the previous subject's focal object
         const iris = prog(f, 0, 9, easeInOut);
         const r = lerp(0, 2300, iris);
@@ -293,16 +486,16 @@ export const S5Subjects: React.FC = () => {
           <AbsoluteFill key={sub.name} style={{ clipPath: `circle(${r}px at ${ox}px ${oy}px)`, background: sub.bg }}>
             <Visual f={f} />
             <div style={{ position: "absolute", top: 210, left: 0, right: 0, transform: `scale(${nameIn}) rotate(${(1 - nameIn) * -6}deg)` }}>
-              <KineticText text={sub.name} frame={f} start={2} size={sub.name.length > 6 ? 150 : 190} color={sub.color} />
+              <KineticText text={sub.name} frame={f} start={2} size={sub.name.length > 8 ? 130 : sub.name.length > 6 ? 150 : 190} color={sub.color} />
             </div>
           </AbsoluteFill>
         );
       })}
 
       {/* subject chips: progress bar for the sequence */}
-      <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 12, direction: "rtl" }}>
+      <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, padding: "0 50px", direction: "rtl" }}>
         {SUBJECTS.map((sub, i) => {
-          const active = Math.floor((frame - SUBJECT_INTRO) / SUBJECT_LEN) === i;
+          const active = Math.min(SUBJECTS.length - 1, Math.floor((frame - SUBJECT_INTRO) / SUBJECT_LEN)) === i;
           const seen = frame >= SUBJECT_INTRO + i * SUBJECT_LEN;
           const b = bounce(frame - i * 2, 200, 7000, 0.35);
           return (
@@ -311,8 +504,8 @@ export const S5Subjects: React.FC = () => {
               style={{
                 fontFamily: FA,
                 fontWeight: 800,
-                fontSize: 32,
-                padding: "10px 22px",
+                fontSize: 30,
+                padding: "8px 20px",
                 borderRadius: 40,
                 background: active ? sub.color : seen ? "#fff" : "rgba(255,255,255,0.7)",
                 color: active ? "#fff" : sub.color,

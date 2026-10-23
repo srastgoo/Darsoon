@@ -8,11 +8,11 @@ export const SCENES = {
   solution: { from: 120, dur: 150 },
   stats: { from: 270, dur: 180 },
   benefits: { from: 450, dur: 180 },
-  subjects: { from: 630, dur: 150 },
-  cta: { from: 780, dur: 120 },
+  subjects: { from: 630, dur: 270 },
+  cta: { from: 900, dur: 120 },
 } as const;
 
-export const TOTAL_FRAMES = 900; // motion film length in "story" frames (all scene timings use these)
+export const TOTAL_FRAMES = 1020; // motion film length in "story" frames (all scene timings use these)
 
 // Playback speed of the motion film. Scenes are authored at story time; the film
 // is rendered slower than that (0.78 → ~22% slower) so the pace stays readable.
@@ -46,6 +46,8 @@ export const STAT_LEN = 30;
 export const BENEFIT_LEN = 60;
 export const SUBJECT_INTRO = 0;
 export const SUBJECT_LEN = 30;
+// 8 subjects × 30 = 240; the last one holds 60 so the CTA starts on a bar line (frame 900).
+export const SUBJECT_LAST_LEN = 60;
 
 export const COLORS = {
   canvas: "#fcf9f7",

@@ -9,8 +9,8 @@ output is fully owned and license-free.
 Music structure (1 bar = 2 s = 60 frames at 30 fps):
   bars 0-1   (0-4 s)    problem: muted plucks over Bm-G, ticking clock, riser
   bar  2     (4 s)      drop: kick, claps, bass, bright arp (solution reveal)
-  bars 2-12  (4-26 s)   full groove, D-A-Bm-G with add9 colours
-  bar  13    (26 s)     CTA: impact + open chord, groove thins out to the end
+  bars 2-14  (4-30 s)   full groove, D-A-Bm-G with add9 colours
+  bar  15    (30 s)     CTA: impact + open chord, groove thins out to the end
 """
 
 import os
@@ -26,7 +26,8 @@ FILM_SPEED = 0.78
 BPM = 120 * FILM_SPEED
 BEAT = 60 / BPM
 BAR = BEAT * 4
-FILM_BARS = 15  # the motion film is 15 bars long
+FILM_BARS = 17  # the motion film is 17 bars long
+CTA_BAR = 15  # SCENES.cta.from (900) / 60
 LENGTH = (FILM_BARS + 0.5) * 4 * 60 / BPM
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "v5")
 
@@ -171,7 +172,7 @@ Bm = (47, [62, 66, 69, 71, 74])  # Bm7
 G = (43, [62, 67, 71, 74, 78])  # Gmaj7
 Em = (40, [64, 67, 71, 74, 78])  # Em7
 
-PROGRESSION = [Bm, G, D, A, Bm, G, D, A, Bm, G, Em, A, D, G, D, D]
+PROGRESSION = [Bm, G, D, A, Bm, G, D, A, Bm, G, D, A, Em, A, D, G, D, D]
 
 
 def build_music():
@@ -186,7 +187,7 @@ def build_music():
         if bar >= FILM_BARS:
             break
         intro = bar < 2
-        outro = bar >= 13
+        outro = bar >= CTA_BAR
         # pad
         pad_gain = 0.22 if intro else 0.3
         place(music, pad([midi_hz(m) for m in tones[:4]], BAR + 0.4), t0, pad_gain)
@@ -219,7 +220,7 @@ def build_music():
             if i < n:
                 env = 1 - 0.55 * np.exp(-np.arange(min(dk, n - i)) / SR * 14)
                 sidechain[i : i + len(env)] = np.minimum(sidechain[i : i + len(env)], env)
-            if b in (1, 3) and not (outro and bar == 15):
+            if b in (1, 3) and not (outro and bar == FILM_BARS - 1):
                 place(drums, clap(), tb, 0.8)
             place(drums, hat(open_=True), tb + BEAT / 2, 0.45)
             place(drums, hat(), tb + BEAT / 4, 0.3)
@@ -231,7 +232,7 @@ def build_music():
 
     # bells on the CTA bar
     for i, m in enumerate([74, 78, 81, 86]):
-        place(music, bell(midi_hz(m), 1.6), 13 * BAR + i * BEAT / 4, 0.16)
+        place(music, bell(midi_hz(m), 1.6), CTA_BAR * BAR + i * BEAT / 4, 0.16)
 
     # riser into the drop (2.0 s -> 4.0 s)
     rdur = 0.95 * BAR
