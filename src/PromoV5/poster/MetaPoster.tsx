@@ -166,7 +166,7 @@ export const MetaPoster: React.FC<{ format: PosterFormat }> = ({ format }) => {
               <path d="M32 12 L18 25 L32 38" fill="none" stroke="#fff" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          <div style={{ fontFamily: EN, fontWeight: 700, fontSize: story ? 40 : 34, color: COLORS.logo }}>darsoon.com</div>
+          <div style={{ fontFamily: EN, fontWeight: 700, fontSize: story ? 40 : 34, color: COLORS.logo }}>www.darsoon.com</div>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>

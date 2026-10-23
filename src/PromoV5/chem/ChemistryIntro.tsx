@@ -435,7 +435,7 @@ const BeatCTA: React.FC = () => {
           </svg>
         </div>
       ) : null}
-      <div style={{ position: "absolute", top: 1240, left: 0, right: 0, textAlign: "center", fontFamily: EN, fontWeight: 700, fontSize: 62, color: COLORS.logo, transform: `scale(${pop(f, 18)})` }}>darsoon.com</div>
+      <div style={{ position: "absolute", top: 1240, left: 0, right: 0, textAlign: "center", fontFamily: EN, fontWeight: 700, fontSize: 62, color: COLORS.logo, transform: `scale(${pop(f, 18)})` }}>www.darsoon.com</div>
       <div style={{ position: "absolute", left: 120, top: 1420, transform: `scale(${pop(f, 20)})` }}>
         <Flask frame={f} size={200} color={PURPLE} level={0.5} />
       </div>

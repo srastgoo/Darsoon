@@ -242,7 +242,7 @@ export const S6CTA: React.FC = () => {
       {/* website + rating under the button */}
       {logoOn ? (
         <div style={{ position: "absolute", left: 0, right: 0, top: 1160, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ marginTop: 40, fontFamily: EN, fontWeight: 700, fontSize: 60, color: COLORS.logo, letterSpacing: 1, transform: `scale(${pop(frame, CTA_LOGO + 8)})` }}>darsoon.com</div>
+          <div style={{ marginTop: 40, fontFamily: EN, fontWeight: 700, fontSize: 60, color: COLORS.logo, letterSpacing: 1, transform: `scale(${pop(frame, CTA_LOGO + 8)})` }}>www.darsoon.com</div>
           <div style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 10 }}>
             {new Array(5).fill(0).map((_, k) => (
               <div key={k} style={{ transform: `scale(${pop(frame, CTA_LOGO + 12 + k * 2)})` }}>
