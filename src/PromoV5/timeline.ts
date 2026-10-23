@@ -15,9 +15,9 @@ export const SCENES = {
 export const TOTAL_FRAMES = 900; // motion film length in "story" frames (all scene timings use these)
 
 // Playback speed of the motion film. Scenes are authored at story time; the film
-// is rendered slower than that (0.85 → ~15% slower) so the pace stays readable.
+// is rendered slower than that (0.78 → ~22% slower) so the pace stays readable.
 // Keep FILM_SPEED in scripts/film5_audio.py equal to this so the music stays on beat.
-export const SPEED = 0.85;
+export const SPEED = 0.78;
 // The opening search scene runs a little quicker than the rest to keep the hook's energy.
 export const OPENING_SPEED = 1.05;
 const OPENING = SCENES.problem.dur;

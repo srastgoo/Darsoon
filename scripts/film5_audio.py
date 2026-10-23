@@ -22,7 +22,7 @@ import numpy as np
 SR = 44100
 # Must equal SPEED in src/PromoV5/timeline.ts: the film is authored at 120 BPM
 # (1 beat = 15 frames) and played back slower, so the music slows with it.
-FILM_SPEED = 0.85
+FILM_SPEED = 0.78
 BPM = 120 * FILM_SPEED
 BEAT = 60 / BPM
 BAR = BEAT * 4

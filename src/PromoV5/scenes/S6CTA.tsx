@@ -63,9 +63,9 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
         {/* tutor result */}
         <div style={{ margin: "24px 26px 0", transform: `translateY(${(1 - result) * 120}px) scale(${0.8 + result * 0.2})`, opacity: clamp01(result * 2) }}>
           <Card radius={30} pad={18} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <Avatar name="negar-seyyedin" size={120} ring={COLORS.ctaBg} position="42% 28%" zoom={1.7} style={{ flexShrink: 0 }} />
+            <Avatar name="hamidreza-joshaghani" size={120} ring={COLORS.ctaBg} position="50% 22%" zoom={1.5} style={{ flexShrink: 0 }} />
             <div style={{ fontFamily: FA, flex: 1 }}>
-              <div style={{ fontWeight: 900, fontSize: 32, color: COLORS.title }}>نگار سیدین</div>
+              <div style={{ fontWeight: 900, fontSize: 32, color: COLORS.title }}>حمیدرضا جوشقانی</div>
               <div style={{ fontWeight: 600, fontSize: 24, color: COLORS.secondary }}>ریاضی · برنامه درسی کانادا</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 6 }}>
                 {new Array(5).fill(0).map((_, k) => (
@@ -92,7 +92,7 @@ const Phone: React.FC<{ frame: number }> = ({ frame }) => {
           }}
         >
           <div style={{ position: "absolute", inset: 0, transform: `scale(${1.05 + frame * 0.001})`, transformOrigin: "40% 35%" }}>
-            <PhotoFill name="negar-seyyedin" position="42% 30%" />
+            <PhotoFill name="hamidreza-joshaghani" position="50% 12%" />
           </div>
           <div style={{ position: "absolute", right: 18, top: 18, width: 160, height: 150, borderRadius: 22, background: "#e7f0fb", border: "4px solid #fff", overflow: "hidden" }}>
             <div style={{ position: "absolute", left: -14, bottom: -4 }}>

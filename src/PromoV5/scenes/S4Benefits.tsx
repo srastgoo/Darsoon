@@ -7,6 +7,7 @@ import { bounce, easeInOut, easeOut, jitter, pendulum, pop, prog, rand, wobble }
 import { Burst, Card, Doodles, Marker, Paper, Shockwave } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Avatar, Cutout, PhotoFill } from "../art/Photo";
+import { SaraStudying } from "../art/Studying";
 import { CoinIcon, HeartIcon, MapleLeaf, StarIcon } from "../art/Icons";
 
 const Headline: React.FC<{ frame: number; text: string; accent: string[]; underline?: string[]; highlight?: string[]; size?: number }> = ({
@@ -177,7 +178,7 @@ const ProgressRing: React.FC<{ frame: number }> = ({ frame }) => {
 
 const StudyPlan: React.FC<{ frame: number }> = ({ frame }) => {
   const enter = pop(frame, 6, 180, 14);
-  const tasks = ["مرور جبر", "تمرین هندسه", "آزمونک آمار"];
+  const tasks = ["مرور جبر", "تمرین هندسه", "حل تمرین‌های ریاضی"];
   return (
     <div style={{ transform: `translateX(${(1 - enter) * 500}px) rotate(${5}deg)` }}>
       <Card radius={28} pad={28} style={{ width: 400, direction: "rtl" }}>
@@ -258,10 +259,10 @@ const BenefitPersonal: React.FC = () => {
         <Feedback frame={frame} />
       </div>
       <div style={{ position: "absolute", left: 40, top: 1450 - kid.y, transform: `scale(${1 + kid.squash * 0.15}, ${1 - kid.squash * 0.15})`, transformOrigin: "50% 100%" }}>
-        <Cutout name="kid-girl" height={470} frame={frame} seed={5} />
+        <SaraStudying height={470} frame={frame} seed={5} />
       </div>
       <div style={{ position: "absolute", left: 880, top: 1450, transform: `scale(${pop(frame, 22)})` }}>
-        <Avatar name="face-tutor-math" size={150} ring={COLORS.orange} />
+        <Avatar name="mohsen-rahimi" size={150} ring={COLORS.orange} position="50% 30%" zoom={1.25} />
       </div>
       <Burst frame={frame - 40} x={240} y={1500} seed={21} count={16} />
     </AbsoluteFill>

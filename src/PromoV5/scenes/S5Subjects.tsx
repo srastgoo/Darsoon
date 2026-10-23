@@ -7,6 +7,7 @@ import { bounce, clamp01, easeInOut, easeOut, lerp, pop, prog, rand, wobble } fr
 import { Burst, Marker } from "../lib/visual";
 import { KineticText } from "../lib/KineticText";
 import { Cutout, PhotoFill } from "../art/Photo";
+import { SaraStudying } from "../art/Studying";
 
 type Subject = { name: string; color: string; bg: string; Visual: React.FC<{ f: number }>; origin: [number, number] };
 
@@ -43,7 +44,7 @@ const MathVisual: React.FC<{ f: number }> = ({ f }) => {
         );
       })}
       <div style={{ position: "absolute", left: 30, top: 1430 + (1 - pop(f, 4, 170, 14)) * 500 }}>
-        <Cutout name="kid-girl" height={400} frame={f} seed={8} />
+        <SaraStudying height={400} frame={f} seed={8} />
       </div>
     </>
   );
@@ -144,7 +145,7 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
     >
       <PhotoFill name="faryal-bagheri" position="50% 30%" />
       <div style={{ position: "absolute", right: 16, bottom: 14, background: "rgba(255,255,255,0.94)", borderRadius: 16, padding: "4px 16px", fontFamily: FA, fontWeight: 800, fontSize: 28, color: COLORS.title, direction: "rtl" }}>
-        فریال باقری · زیست‌شناسی
+        فریال باقری · بیولوژی
       </div>
     </div>
     </>
@@ -269,7 +270,7 @@ const PhysicsVisual: React.FC<{ f: number }> = ({ f }) => {
 export const SUBJECTS: Subject[] = [
   { name: "ریاضی", color: COLORS.orange, bg: "#fff1e6", Visual: MathVisual, origin: [890, 1420] },
   { name: "علوم", color: COLORS.teal, bg: "#e6f6f3", Visual: ScienceVisual, origin: [540, 1180] },
-  { name: "زیست‌شناسی", color: COLORS.green, bg: "#eaf6e8", Visual: BiologyVisual, origin: [560, 980] },
+  { name: "بیولوژی", color: COLORS.green, bg: "#eaf6e8", Visual: BiologyVisual, origin: [560, 980] },
   { name: "شیمی", color: COLORS.purple, bg: "#f1eafc", Visual: ChemVisual, origin: [780, 1180] },
   { name: "فیزیک", color: COLORS.blue, bg: "#e7f0fb", Visual: PhysicsVisual, origin: [540, 1200] },
 ];

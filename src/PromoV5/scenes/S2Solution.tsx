@@ -11,7 +11,7 @@ import { CheckBadge } from "../art/Icons";
 import { Classroom } from "../art/Classroom";
 
 const TUTORS = [
-  { name: "محسن رحیمی", sub: "زیست‌شناسی", photo: "mohsen-rahimi" as PersonPhoto, pos: "50% 35%" },
+  { name: "محسن رحیمی", sub: "بیولوژی", photo: "mohsen-rahimi" as PersonPhoto, pos: "50% 35%" },
   { name: "مریم رضایی", sub: "ریاضی", photo: "tutor-math" as PersonPhoto, pos: "50% 30%" },
   { name: "نگار سیدین", sub: "معلم خصوصی ریاضی", photo: "negar-seyyedin" as PersonPhoto, pos: "40% 30%" },
 ];
