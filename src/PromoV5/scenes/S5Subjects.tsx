@@ -43,7 +43,7 @@ const MathVisual: React.FC<{ f: number }> = ({ f }) => {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 30, top: 1430 + (1 - pop(f, 4, 170, 14)) * 500 }}>
+      <div style={{ position: "absolute", left: 30, top: 1290 + (1 - pop(f, 4, 170, 14)) * 500 }}>
         <SaraStudying height={400} frame={f} seed={8} />
       </div>
     </>
@@ -85,7 +85,7 @@ const ScienceVisual: React.FC<{ f: number }> = ({ f }) => {
         <rect x={-80} y={150} width={160} height={70} rx={20} fill={COLORS.title} />
       </g>
       {/* sprouting plant */}
-      <g transform="translate(820 1700)">
+      <g transform="translate(820 1590)">
         <path d="M-100 0 H100 L80 120 H-80 Z" fill={COLORS.orange} />
         <path d={`M0 0 C 0 ${-150 * grow} ${-20 * grow} ${-220 * grow} 0 ${-320 * grow}`} stroke={COLORS.green} strokeWidth={14} fill="none" strokeLinecap="round" />
         <ellipse cx={-50 * grow} cy={-180 * grow} rx={60 * grow} ry={26 * grow} fill={COLORS.green} transform={`rotate(-30 ${-50 * grow} ${-180 * grow})`} />
@@ -133,7 +133,7 @@ const BiologyVisual: React.FC<{ f: number }> = ({ f }) => {
       style={{
         position: "absolute",
         left: 470,
-        top: 1420,
+        top: 1340,
         width: 540,
         height: 349,
         borderRadius: 30,
@@ -214,7 +214,7 @@ const ChemVisual: React.FC<{ f: number }> = ({ f }) => {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: 210, top: 1190 + (1 - pop(f, 3, 170, 14)) * 600 }}>
+      <div style={{ position: "absolute", left: 210, top: 1110 + (1 - pop(f, 3, 170, 14)) * 600 }}>
         <Cutout name="kid-chem" height={600} frame={f} seed={9} />
       </div>
     </>
@@ -250,7 +250,7 @@ const PhysicsVisual: React.FC<{ f: number }> = ({ f }) => {
           </g>
         );
       })}
-      <g transform="translate(540 1620)" opacity={0.9}>
+      <g transform="translate(540 1590) scale(0.72)" opacity={0.9}>
         {[0, 60, 120].map((a) => (
           <ellipse key={a} rx={190} ry={60} fill="none" stroke={COLORS.blue} strokeWidth={6} transform={`rotate(${a})`} />
         ))}
@@ -448,7 +448,7 @@ const CodingVisual: React.FC<{ f: number }> = ({ f }) => {
           <Gear x={985} y={1430} r={46} rot={-f * 10.6 + 8} color={CODE} />
         </g>
       </svg>
-      <div style={{ position: "absolute", left: 80, top: 1330 + (1 - pop(f, 4, 170, 14)) * 600 }}>
+      <div style={{ position: "absolute", left: 80, top: 1260 + (1 - pop(f, 4, 170, 14)) * 600 }}>
         <Cutout name="kid-laptop" height={430} frame={f} seed={12} />
       </div>
     </>
@@ -493,7 +493,7 @@ export const S5Subjects: React.FC = () => {
       })}
 
       {/* subject chips: progress bar for the sequence */}
-      <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, padding: "0 50px", direction: "rtl" }}>
+      <div style={{ position: "absolute", bottom: 56, left: 0, right: 0, display: "grid", gridTemplateColumns: "repeat(4, auto)", justifyContent: "center", gap: "14px 14px", direction: "rtl" }}>
         {SUBJECTS.map((sub, i) => {
           const active = Math.min(SUBJECTS.length - 1, Math.floor((frame - SUBJECT_INTRO) / SUBJECT_LEN)) === i;
           const seen = frame >= SUBJECT_INTRO + i * SUBJECT_LEN;
@@ -506,6 +506,7 @@ export const S5Subjects: React.FC = () => {
                 fontWeight: 800,
                 fontSize: 30,
                 padding: "8px 20px",
+                textAlign: "center",
                 borderRadius: 40,
                 background: active ? sub.color : seen ? "#fff" : "rgba(255,255,255,0.7)",
                 color: active ? "#fff" : sub.color,
