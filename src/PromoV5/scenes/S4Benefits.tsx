@@ -274,10 +274,10 @@ const BenefitPersonal: React.FC = () => {
 /** Big swinging price tag: "from 10 Canadian dollars", the one price fact we show. */
 const PriceTag: React.FC<{ frame: number }> = ({ frame }) => {
   const ang = pendulum(frame - 4, 14, 30, 1.6);
-  const grow = pop(frame, 2, 200, 11);
-  const num = pop(frame, 10, 220, 9);
+  const grow = pop(frame, 22, 200, 11);
+  const num = pop(frame, 28, 220, 9);
   return (
-    <div style={{ position: "absolute", left: 190, top: 560, width: 700, transformOrigin: "50% 0%", transform: `rotate(${ang}deg) scale(${grow})` }}>
+    <div style={{ position: "absolute", left: 190, top: 600, width: 700, transformOrigin: "50% 0%", transform: `rotate(${ang}deg) scale(${grow})` }}>
       <svg width={700} height={780} viewBox="0 0 700 780" style={{ position: "absolute", left: 0, top: 0, overflow: "visible", filter: "drop-shadow(0 30px 40px rgba(150,70,10,0.25))" }}>
         <path d="M350 0 V170" stroke={COLORS.title} strokeWidth={6} strokeDasharray="14 10" />
         <path d="M70 290 L350 160 L630 290 V720 Q630 760 590 760 H110 Q70 760 70 720 Z" fill={COLORS.ctaBg} stroke={COLORS.ctaText} strokeWidth={10} strokeLinejoin="round" />
@@ -306,7 +306,13 @@ const BenefitPrice: React.FC = () => {
     <AbsoluteFill>
       <Paper />
       <Doodles frame={frame + 600} seed={8} opacity={0.4} />
-      <Headline frame={frame} text={"یادگیری باکیفیت\nقیمت مناسب"} accent={["مناسب"]} underline={["باکیفیت"]} size={90} />
+      {/* two beats, one line at a time: quality first, then the fair price */}
+      <div style={{ position: "absolute", top: 170, left: 0, right: 0 }}>
+        <KineticText text="یادگیری باکیفیت" frame={frame} start={2} size={112} stagger={3} underline={["باکیفیت"]} />
+      </div>
+      <div style={{ position: "absolute", top: 360, left: 0, right: 0 }}>
+        <KineticText text="قیمت مناسب" frame={frame} start={14} size={112} stagger={3} accent={["مناسب"]} />
+      </div>
       <PriceTag frame={frame} />
       <div style={{ position: "absolute", left: 300, top: 1500, transform: `translateY(${(1 - pop(frame, 6, 160, 14)) * 400}px)` }}>
         <Cutout name="kid-laptop" height={420} frame={frame} seed={6} />
