@@ -306,7 +306,7 @@ const BenefitPrice: React.FC = () => {
     <AbsoluteFill>
       <Paper />
       <Doodles frame={frame + 600} seed={8} opacity={0.4} />
-      <Headline frame={frame} text={"قیمت مناسب برای\nیادگیری باکیفیت"} accent={["مناسب"]} underline={["باکیفیت"]} size={90} />
+      <Headline frame={frame} text={"یادگیری باکیفیت\nقیمت مناسب"} accent={["مناسب"]} underline={["باکیفیت"]} size={90} />
       <PriceTag frame={frame} />
       <div style={{ position: "absolute", left: 300, top: 1500, transform: `translateY(${(1 - pop(frame, 6, 160, 14)) * 400}px)` }}>
         <Cutout name="kid-laptop" height={420} frame={frame} seed={6} />
