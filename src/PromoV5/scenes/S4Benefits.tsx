@@ -271,68 +271,30 @@ const BenefitPersonal: React.FC = () => {
 
 /* ------------------------------------------------------------- Benefit 3: Price */
 
-const BalanceScale: React.FC<{ frame: number }> = ({ frame }) => {
-  // beam starts tipped toward "price", released at f=10 and settles balanced (damped pendulum)
-  const ang = frame < 10 ? 18 : pendulum(frame - 10, 18, 26, 2.2);
-  const rad = (ang * Math.PI) / 180;
-  const half = 330;
-  const lx = -Math.cos(rad) * half;
-  const ly = -Math.sin(rad) * half;
-  const rx = Math.cos(rad) * half;
-  const ry = Math.sin(rad) * half;
-  const coinDrop = (k: number) => bounce(frame - 2 - k * 4, 500, 8000, 0.3);
-  const Pan: React.FC<{ x: number; y: number; label: string; children: React.ReactNode }> = ({ x, y, label, children }) => (
-    <g transform={`translate(${x} ${y})`}>
-      <path d="M0 0 L-90 150 M0 0 L90 150" stroke={COLORS.title} strokeWidth={5} />
-      <path d="M-120 150 Q0 220 120 150 Z" fill={COLORS.title} />
-      <g transform="translate(0 150)">{children}</g>
-      <text x={0} y={260} textAnchor="middle" fontFamily={FA} fontWeight={900} fontSize={48} fill={COLORS.title}>
-        {label}
-      </text>
-    </g>
-  );
-  return (
-    <svg width={1000} height={760} viewBox="-500 -120 1000 760" style={{ overflow: "visible" }}>
-      <path d="M0 0 L-70 560 L70 560 Z" fill="#e6ddd5" />
-      <rect x={-180} y={548} width={360} height={30} rx={15} fill={COLORS.title} />
-      <g>
-        <line x1={lx} y1={ly} x2={rx} y2={ry} stroke={COLORS.title} strokeWidth={22} strokeLinecap="round" />
-        <circle r={30} fill={COLORS.orange} />
-      </g>
-      <Pan x={rx} y={ry} label="کیفیت">
-        <g transform={`translate(0 ${-70}) scale(${pop(frame, 4)})`}>
-          <path d="M0 -60 L16 -20 L58 -18 L25 8 L36 50 L0 26 L-36 50 L-25 8 L-58 -18 L-16 -20 Z" fill={COLORS.star} />
-        </g>
-      </Pan>
-      <Pan x={lx} y={ly} label="قیمت">
-        {[0, 1, 2].map((k) => {
-          const b = coinDrop(k);
-          return frame >= 2 + k * 4 ? (
-            <g key={k} transform={`translate(${(k - 1) * 8} ${-30 - k * 26 - b.y}) scale(${1 + b.squash * 0.2}, ${1 - b.squash * 0.3})`}>
-              <ellipse rx={56} ry={18} fill="#e09a00" />
-              <ellipse cy={-8} rx={56} ry={18} fill={COLORS.yellow} />
-            </g>
-          ) : null;
-        })}
-      </Pan>
-    </svg>
-  );
-};
-
+/** Big swinging price tag: "from 10 Canadian dollars", the one price fact we show. */
 const PriceTag: React.FC<{ frame: number }> = ({ frame }) => {
-  const ang = pendulum(frame - 4, 28, 30, 1.6);
-  const drop = bounce(frame - 2, 300, 7000, 0.25);
+  const ang = pendulum(frame - 4, 14, 30, 1.6);
+  const grow = pop(frame, 2, 200, 11);
+  const num = pop(frame, 10, 220, 9);
   return (
-    <div style={{ position: "absolute", left: 30, top: 420 - drop.y, transformOrigin: "50% 0%", transform: `rotate(${ang}deg)` }}>
-      <svg width={150} height={350} viewBox="0 0 180 420" style={{ overflow: "visible" }}>
-        <path d="M90 0 V200" stroke={COLORS.title} strokeWidth={4} strokeDasharray="10 8" />
-        <path d="M40 220 L90 190 L140 220 V380 Q140 400 120 400 H60 Q40 400 40 380 Z" fill={COLORS.ctaBg} stroke={COLORS.ctaText} strokeWidth={6} strokeLinejoin="round" />
-        <circle cx={90} cy={222} r={12} fill="#fff" stroke={COLORS.ctaText} strokeWidth={5} />
-        <text x={90} y={318} textAnchor="middle" fontFamily={EN} fontWeight={800} fontSize={58} fill={COLORS.ctaText}>
-          $
-        </text>
-        <path d="M58 352 Q90 340 122 352" stroke={COLORS.ctaText} strokeWidth={6} fill="none" strokeLinecap="round" />
+    <div style={{ position: "absolute", left: 190, top: 560, width: 700, transformOrigin: "50% 0%", transform: `rotate(${ang}deg) scale(${grow})` }}>
+      <svg width={700} height={780} viewBox="0 0 700 780" style={{ position: "absolute", left: 0, top: 0, overflow: "visible", filter: "drop-shadow(0 30px 40px rgba(150,70,10,0.25))" }}>
+        <path d="M350 0 V170" stroke={COLORS.title} strokeWidth={6} strokeDasharray="14 10" />
+        <path d="M70 290 L350 160 L630 290 V720 Q630 760 590 760 H110 Q70 760 70 720 Z" fill={COLORS.ctaBg} stroke={COLORS.ctaText} strokeWidth={10} strokeLinejoin="round" />
+        <path d="M100 305 L350 190 L600 305 V712 Q600 730 582 730 H118 Q100 730 100 712 Z" fill="none" stroke={COLORS.ctaText} strokeWidth={4} strokeDasharray="16 12" opacity={0.6} />
+        <circle cx={350} cy={250} r={26} fill="#fff" stroke={COLORS.ctaText} strokeWidth={8} />
       </svg>
+      <div style={{ position: "absolute", left: 0, top: 300, width: 700, textAlign: "center", fontFamily: FA, direction: "rtl", color: COLORS.ctaText }}>
+        {/* prices vary by subject and tutor: "from" must read as clearly as the number */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 26, marginTop: 30 }}>
+          <span style={{ fontWeight: 900, fontSize: 120, lineHeight: 1, color: COLORS.title }}>از</span>
+          <span style={{ fontWeight: 900, fontSize: 250, lineHeight: 1.05, color: COLORS.orange, display: "inline-block", transform: `scale(${num})` }}>۱۰</span>
+        </div>
+        <div style={{ fontWeight: 900, fontSize: 72, lineHeight: 1.1, color: COLORS.title, display: "flex", alignItems: "center", justifyContent: "center", gap: 14 }}>
+          دلار کانادا
+          <MapleLeaf size={60} />
+        </div>
+      </div>
     </div>
   );
 };
@@ -344,11 +306,8 @@ const BenefitPrice: React.FC = () => {
     <AbsoluteFill>
       <Paper />
       <Doodles frame={frame + 600} seed={8} opacity={0.4} />
-      <PriceTag frame={frame} />
       <Headline frame={frame} text={"قیمت مناسب برای\nیادگیری باکیفیت"} accent={["مناسب"]} underline={["باکیفیت"]} size={90} />
-      <div style={{ position: "absolute", left: 40, top: 760 }}>
-        <BalanceScale frame={frame} />
-      </div>
+      <PriceTag frame={frame} />
       <div style={{ position: "absolute", left: 300, top: 1500, transform: `translateY(${(1 - pop(frame, 6, 160, 14)) * 400}px)` }}>
         <Cutout name="kid-laptop" height={420} frame={frame} seed={6} />
       </div>
